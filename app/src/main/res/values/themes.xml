@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.WhichOne" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">#FFC8D7CF</item>
+        <item name="android:statusBarColor">#FF3552A2</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowLightStatusBar">true</item>

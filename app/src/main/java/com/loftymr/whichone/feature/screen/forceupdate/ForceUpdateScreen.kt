@@ -6,6 +6,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,26 +45,30 @@ fun ForceUpdateContent(navigateToPlayStore: () -> Unit) {
         )
 
         Text(
-            text = "New version available",
+            text = stringResource(id = R.string.new_version_available),
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 4.dp),
-            style = MaterialTheme.typography.h1.copy(fontSize = 24.sp)
+            style = MaterialTheme.typography.h1.copy(fontSize = 24.sp, color = Color.White)
         )
 
         Text(
-            text = "Please, update app to new version to continue reposting.",
+            text = stringResource(id = R.string.new_version_available_desc),
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            style = MaterialTheme.typography.h1.copy(fontSize = 16.sp, textAlign = TextAlign.Center)
+            style = MaterialTheme.typography.h1.copy(
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                color = Color(0xFFFEFEFE)
+            )
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        WhichOneButton(buttonText = "Go To Play Store") {
+        WhichOneButton(buttonText = stringResource(id = R.string.go_to_play_store)) {
             navigateToPlayStore.invoke()
         }
     }

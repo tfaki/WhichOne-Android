@@ -1,8 +1,6 @@
 package com.loftymr.whichone.data.remote.api
 
 import com.loftymr.whichone.data.model.RingsOfThePowerResponse
-import com.loftymr.whichone.data.remote.util.DataState
-import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

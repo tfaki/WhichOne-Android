@@ -4,16 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,9 +47,7 @@ fun SurveyScreen(
         else -> {
             WhichOneTemplate(
                 topBar = {
-                    WhichOneTopBar(title = "Rings Of Power", backButtonEnabled = false) {
-
-                    }
+                    WhichOneTopBar(title = stringResource(id = R.string.survey_title), backButtonEnabled = false)
                 },
                 content = {
                     SurveyContent(
@@ -81,6 +79,9 @@ fun SurveyContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(start = 8.dp, end = 8.dp, top = 36.dp, bottom = 8.dp)
+                .shadow(elevation = 10.dp, shape = RoundedCornerShape(16.dp))
+                .background(color = Color(0xFFFEFEFE), shape = RoundedCornerShape(16.dp))
         ) {
             Head(
                 imageSource = data.character?.srcSet?.nineHundred.orEmpty(),
@@ -94,7 +95,7 @@ fun SurveyContent(
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.CenterHorizontally)
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                style = MaterialTheme.typography.h1.copy(fontSize = 18.sp, color = Color.White)
+                style = MaterialTheme.typography.h1.copy(fontSize = 18.sp, color = Color.Black)
             )
 
             list[questionIndex].choices?.let { choices ->
@@ -140,33 +141,29 @@ fun SurveyContent(
 
 @Composable
 fun ErrorView(clickToRetry: () -> Unit) {
-    val verticalGradientBrush = Brush.verticalGradient(
-        colors = listOf(
-            Color(0xFFC8D7CF),
-            Color(0xFF6987B4),
-            Color(0xFF333D5F)
-        )
-    )
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush = verticalGradientBrush),
+            .background(color = Color(0xFF3552A2)),
         verticalArrangement = Arrangement.Top
     ) {
         WhichOneAnim(rawResId = R.raw.opps_anim)
 
         Text(
-            text = "Something went wrong!",
+            text = stringResource(id = R.string.something_went_wrong),
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 4.dp),
-            style = MaterialTheme.typography.h1.copy(fontSize = 24.sp)
+            style = MaterialTheme.typography.h1.copy(
+                fontSize = 24.sp,
+                color = Color.White
+            )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        WhichOneButton(buttonText = "RETRY") {
+        WhichOneButton(buttonText = stringResource(id = R.string.retry)) {
             clickToRetry.invoke()
         }
     }

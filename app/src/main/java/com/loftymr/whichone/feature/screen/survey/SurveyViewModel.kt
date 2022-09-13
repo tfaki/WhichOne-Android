@@ -32,11 +32,15 @@ class SurveyViewModel @Inject constructor(
                 when (it) {
                     is DataState.Success -> {
                         setState {
-                            currentState.copy(
-                                data = it.data,
-                                isLoading = false,
-                                isError = false
-                            )
+                            if (it.data.character != null && !it.data.questions.isNullOrEmpty()) {
+                                currentState.copy(
+                                    data = it.data,
+                                    isLoading = false,
+                                    isError = false
+                                )
+                            } else {
+                                currentState.copy(isLoading = false, isError = true)
+                            }
                         }
                     }
                     is DataState.Loading -> {
