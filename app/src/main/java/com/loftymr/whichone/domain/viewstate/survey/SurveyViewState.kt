@@ -8,7 +8,7 @@ import com.loftymr.whichone.domain.viewstate.WhichOneViewState
  */
 
 data class SurveyViewState(
-    val isLoading: Boolean = false,
+    var isLoading: Boolean = false,
     val isError: Boolean = false,
     val data: RingsOfThePowerResponse? = null
 ) : WhichOneViewState

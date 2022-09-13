@@ -1,5 +1,7 @@
 package com.loftymr.whichone.feature.component
 
+import android.app.Activity
+import android.content.Context
 import androidx.annotation.RawRes
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.animateFloat
@@ -22,14 +24,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.rememberImagePainter
 import com.airbnb.lottie.compose.*
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.loftymr.whichone.BuildConfig
 import com.loftymr.whichone.R
 import kotlinx.coroutines.delay
 
 /**
  * Created by talhafaki on 9.09.2022.
  */
+
+var mInterstitialAd: InterstitialAd? = null
 
 @Composable
 fun WhichOneTemplate(
@@ -130,8 +139,6 @@ fun CircularProgressAnimated(modifier: Modifier = Modifier) {
 fun SelectionBox(
     modifier: Modifier = Modifier,
     text: String,
-    list: List<String>,
-    index: Int,
     isSelected: () -> Unit
 ) {
     val color = remember { Animatable(Color.Transparent) }
@@ -168,7 +175,7 @@ fun SelectionBox(
             }
     ) {
         Text(
-            text = list[index],
+            text = text,
             modifier = Modifier
                 .fillMaxSize(),
             style = MaterialTheme.typography.body2.copy(
@@ -291,5 +298,70 @@ fun WhichOneButton(modifier: Modifier = Modifier, buttonText: String, onClick: (
                 color = Color(0xFF333D5F)
             )
         )
+    }
+}
+
+@Composable
+fun AdvertView(modifier: Modifier = Modifier) {
+    AndroidView(
+        modifier = modifier.fillMaxWidth(),
+        factory = { context ->
+            AdView(context).apply {
+                val bannerID = if (BuildConfig.DEBUG) context.getString(R.string.ad_test_id_banner) else context.getString(R.string.ad_id_banner)
+                setAdSize(AdSize.BANNER)
+                adUnitId = bannerID
+                loadAd(AdRequest.Builder().build())
+            }
+        }, update = {
+            it.apply {
+                loadAd(AdRequest.Builder().build())
+            }
+        }
+    )
+}
+
+fun loadInterstitial(context: Context, isFinished: (Boolean) -> Unit) {
+    InterstitialAd.load(
+        context,
+        context.getString(if (BuildConfig.DEBUG) R.string.ad_test_id_interstitial else R.string.ad_id_interstitial),
+        AdRequest.Builder().build(),
+        object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                mInterstitialAd = null
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                mInterstitialAd = interstitialAd
+                showInterstitial(context, isFinished)
+            }
+        }
+    )
+}
+
+fun showInterstitial(context: Context, isFinished: (Boolean) -> Unit) {
+    if (mInterstitialAd != null) {
+        mInterstitialAd!!.show(context as Activity)
+
+        addInterstitialCallbacks(isFinished = isFinished)
+    } else {
+        isFinished.invoke(true)
+    }
+}
+
+// add the interstitial ad callbacks
+fun addInterstitialCallbacks(isFinished: (Boolean) -> Unit) {
+    mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+        override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+            isFinished.invoke(true)
+        }
+
+        override fun onAdShowedFullScreenContent() {
+            mInterstitialAd = null
+            isFinished.invoke(false)
+        }
+
+        override fun onAdDismissedFullScreenContent() {
+            isFinished.invoke(true)
+        }
     }
 }

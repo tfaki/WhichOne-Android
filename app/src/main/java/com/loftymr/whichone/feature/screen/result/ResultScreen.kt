@@ -1,5 +1,6 @@
 package com.loftymr.whichone.feature.screen.result
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,6 +38,9 @@ fun ResultScreen(
                 navigateToSurvey.invoke()
             }
         )
+    }
+    BackHandler {
+        navigateToSurvey.invoke()
     }
 }
 

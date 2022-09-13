@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">WhichOne</string>
+    <string name="ad_id_banner"></string> <!-- Test Ad -->
+    <string name="ad_test_id_banner">ca-app-pub-3940256099942544/6300978111</string> <!-- Test Ad -->
+    <string name="ad_id_interstitial"></string> <!-- Test Ad -->
+    <string name="ad_test_id_interstitial">ca-app-pub-3940256099942544/8691691433</string> <!-- Test Ad -->
 </resources>

@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -93,6 +94,15 @@ dependencies {
 
     // Lottie
     implementation "com.airbnb.android:lottie-compose:4.2.2"
+
+    // Google Ads
+    implementation "com.google.android.gms:play-services-ads:21.2.0"
+    implementation "com.google.firebase:firebase-ads:21.2.0"
+    implementation "com.google.firebase:firebase-core:21.1.1"
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.13'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.1.1'
 
     // Testing
     testImplementation 'junit:junit:4.13.2'

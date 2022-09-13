@@ -50,6 +50,14 @@ class SurveyViewModel @Inject constructor(
         }
     }
 
+    fun showLoading(hasLoading: Boolean) {
+        if (hasLoading) {
+            setState { currentState.copy(isLoading = true) }
+        } else {
+            setState { currentState.copy(isLoading = false) }
+        }
+    }
+
     override fun createInitialState(): SurveyViewState = SurveyViewState()
     override fun onTriggerEvent(event: SurveyViewEvent) {}
 }

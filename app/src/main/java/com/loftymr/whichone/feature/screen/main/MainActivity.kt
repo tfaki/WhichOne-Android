@@ -12,6 +12,7 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
 import com.loftymr.whichone.feature.navigation.NavGraph
 import com.loftymr.whichone.feature.theme.WhichOneTheme
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
                 }
 
             }).check()
+        MobileAds.initialize(this)
         val verticalGradientBrush = Brush.verticalGradient(
             colors = listOf(
                 Color(0xFFC8D7CF),
