@@ -2,6 +2,7 @@ package com.loftymr.whichone.feature.component
 
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -48,6 +49,7 @@ fun loadInterstitial(context: Context, isFinished: (Boolean) -> Unit) {
         object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 mInterstitialAd = null
+                isFinished.invoke(true)
             }
 
             override fun onAdLoaded(interstitialAd: InterstitialAd) {
@@ -56,6 +58,11 @@ fun loadInterstitial(context: Context, isFinished: (Boolean) -> Unit) {
             }
         }
     )
+    Handler().postDelayed({
+        if (mInterstitialAd == null) {
+            isFinished.invoke(true)
+        }
+    }, 3500)
 }
 
 fun showInterstitial(context: Context, isFinished: (Boolean) -> Unit) {

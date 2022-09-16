@@ -31,7 +31,6 @@ class MainActivity : ComponentActivity() {
                 }
 
             }).check()
-        MobileAds.initialize(this)
         setContent {
             WhichOneTheme(darkTheme = false) {
                 // A surface container using the 'background' color from the theme
@@ -49,6 +48,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        MobileAds.initialize(this)
     }
 
     private fun redirectStore(updateUrl: String) {

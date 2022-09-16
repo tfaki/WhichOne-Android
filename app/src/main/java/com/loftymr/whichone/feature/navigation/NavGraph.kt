@@ -26,15 +26,15 @@ fun NavGraph(updateURL: String, navigateToPlayStore: () -> Unit) {
     ) {
         composable(route = "survey") {
             SurveyScreen(
-                navigateToResult = { title, srcSet ->
+                navigateToResult = { title, srcSet, desc ->
                     val encodedUrl = URLEncoder.encode(srcSet, StandardCharsets.UTF_8.toString())
-                    navController.navigate("result/$encodedUrl/$title")
+                    navController.navigate("result/$encodedUrl/$title/$desc")
                 }
             )
         }
 
         composable(
-            route = "result/{imageSource}/{title}",
+            route = "result/{imageSource}/{title}/{desc}",
             arguments = listOf(
                 navArgument("title") {
                     defaultValue = ""
@@ -43,11 +43,16 @@ fun NavGraph(updateURL: String, navigateToPlayStore: () -> Unit) {
                 navArgument("imageSource") {
                     defaultValue = ""
                     type = NavType.StringType
+                },
+                navArgument("desc") {
+                    defaultValue = ""
+                    type = NavType.StringType
                 }
             )) {
             ResultScreen(
                 title = it.arguments?.getString("title").orEmpty(),
                 character = it.arguments?.getString("imageSource").orEmpty(),
+                desc = it.arguments?.getString("desc").orEmpty(),
                 navigateToSurvey = {
                     navController.navigate("survey")
                 }

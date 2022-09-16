@@ -10,7 +10,9 @@ data class RingsOfThePowerResponse(
     @SerializedName("questions")
     val questions: List<Questions>? = null,
     @SerializedName("charecter")
-    val character: Character? = null
+    val character: Character? = null,
+    @SerializedName("backGroundPictures")
+    val backgroundPictures: List<String>? = null
 )
 
 data class Questions(
@@ -26,7 +28,9 @@ data class Character(
     @SerializedName("title")
     val title: String? = null,
     @SerializedName("srcset")
-    val srcSet: SrcSet? = null
+    val srcSet: SrcSet? = null,
+    @SerializedName("description")
+    val description: String? = null
 )
 
 data class SrcSet(

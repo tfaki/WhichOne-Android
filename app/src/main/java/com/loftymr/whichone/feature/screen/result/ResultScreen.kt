@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
@@ -29,6 +30,7 @@ import com.loftymr.whichone.R
 fun ResultScreen(
     title: String = "",
     character: String = "",
+    desc: String = "",
     navigateToSurvey: () -> Unit
 ) {
     WhichOneTemplate(
@@ -37,6 +39,7 @@ fun ResultScreen(
         ResultContent(
             title = title,
             character = character,
+            desc = desc,
             navigateToSurvey = {
                 navigateToSurvey.invoke()
             }
@@ -51,6 +54,7 @@ fun ResultScreen(
 fun ResultContent(
     modifier: Modifier = Modifier,
     title: String = "",
+    desc: String = "",
     character: String = "",
     navigateToSurvey: () -> Unit
 ) {
@@ -76,10 +80,19 @@ fun ResultContent(
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             color = Color.White,
-            style = MaterialTheme.typography.body1.copy(color = Color.White, fontSize = 24.sp)
+            style = MaterialTheme.typography.h1.copy(color = Color.White, fontSize = 24.sp)
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = desc,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(Alignment.CenterHorizontally)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            color = Color.White,
+            style = MaterialTheme.typography.body1.copy(color = Color.White.copy(0.5f), fontSize = 16.sp, textAlign = TextAlign.Center)
+        )
         Box(
             modifier = Modifier
                 .fillMaxSize()

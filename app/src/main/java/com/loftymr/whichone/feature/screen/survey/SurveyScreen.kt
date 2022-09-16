@@ -2,9 +2,9 @@ package com.loftymr.whichone.feature.screen.survey
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,7 +30,7 @@ import com.loftymr.whichone.feature.component.*
 @Composable
 fun SurveyScreen(
     viewModel: SurveyViewModel = hiltViewModel(),
-    navigateToResult: (String, String) -> Unit
+    navigateToResult: (String, String, String) -> Unit
 ) {
     val viewState = viewModel.uiState.collectAsState().value
 
@@ -44,16 +45,19 @@ fun SurveyScreen(
                 }
             )
         }
-        else -> {
+        viewState.data != null -> {
             WhichOneTemplate(
                 topBar = {
-                    WhichOneTopBar(title = stringResource(id = R.string.survey_title), backButtonEnabled = false)
+                    WhichOneTopBar(
+                        title = stringResource(id = R.string.survey_title),
+                        backButtonEnabled = false
+                    )
                 },
                 content = {
                     SurveyContent(
                         data = viewState.data,
-                        showResult = { title, srcSet ->
-                            navigateToResult.invoke(title, srcSet?.nineHundred.orEmpty())
+                        showResult = { title, srcSet , desc->
+                            navigateToResult.invoke(title, srcSet?.nineHundred.orEmpty(), desc)
                         },
                         adMob = {
                             viewModel.showLoading(it)
@@ -62,13 +66,18 @@ fun SurveyScreen(
                 }
             )
         }
+        else -> {
+            ErrorView {
+                viewModel.getRingsOfThePower()
+            }
+        }
     }
 }
 
 @Composable
 fun SurveyContent(
     data: RingsOfThePowerResponse?,
-    showResult: (String, SrcSet?) -> Unit,
+    showResult: (String, SrcSet?, String) -> Unit,
     adMob: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -80,12 +89,13 @@ fun SurveyContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(start = 8.dp, end = 8.dp, top = 36.dp, bottom = 8.dp)
-                .shadow(elevation = 10.dp, shape = RoundedCornerShape(16.dp))
-                .background(color = Color(0xFFFEFEFE), shape = RoundedCornerShape(16.dp))
+                .shadow(elevation = 10.dp, shape = RoundedCornerShape(12.dp))
+                .background(color = Color(0xFFFEFEFE), shape = RoundedCornerShape(12.dp))
+                .verticalScroll(state = rememberScrollState())
         ) {
             Head(
-                imageSource = data.character?.srcSet?.nineHundred.orEmpty(),
-                numberOfSteps = list.size - 1,
+                imageSource = data.backgroundPictures?.get(questionIndex).orEmpty(),
+                numberOfSteps = list.lastIndex,
                 currentStep = questionIndex
             )
 
@@ -95,33 +105,33 @@ fun SurveyContent(
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.CenterHorizontally)
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                style = MaterialTheme.typography.h1.copy(fontSize = 18.sp, color = Color.Black)
+                style = MaterialTheme.typography.h1.copy(fontSize = 18.sp, color = Color.Black,  textAlign = TextAlign.Center)
             )
 
             list[questionIndex].choices?.let { choices ->
-                LazyColumn(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-                    items(choices) {
-                        SelectionBox(
-                            text = it,
-                            isSelected = {
-                                if (questionIndex < list.size - 1) {
-                                    questionIndex++
-                                } else {
-                                    adMob.invoke(true)
-                                    loadInterstitial(
-                                        context = context,
-                                        isFinished = {
-                                            adMob.invoke(false)
-                                            showResult.invoke(
-                                                data.character?.title.orEmpty(),
-                                                data.character?.srcSet
-                                            )
-                                        }
-                                    )
-                                }
+                choices.forEach {
+                    SelectionBox(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        text = it,
+                        isSelected = {
+                            if (questionIndex < list.lastIndex) {
+                                questionIndex++
+                            } else {
+                                adMob.invoke(true)
+                                loadInterstitial(
+                                    context = context,
+                                    isFinished = {
+                                        adMob.invoke(false)
+                                        showResult.invoke(
+                                            data.character?.title.orEmpty(),
+                                            data.character?.srcSet,
+                                            data.character?.description.orEmpty()
+                                        )
+                                    }
+                                )
                             }
-                        )
-                    }
+                        }
+                    )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
             }

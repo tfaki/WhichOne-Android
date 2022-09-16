@@ -26,6 +26,7 @@ fun Head(imageSource: String, numberOfSteps: Int, currentStep: Int) {
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .fillMaxWidth()
+            .height(250.dp)
             .padding(16.dp)
             .shadow(elevation = 10.dp, shape = RoundedCornerShape(8.dp))
             .clip(RoundedCornerShape(8.dp))

@@ -1,9 +1,14 @@
 package com.loftymr.whichone.data.di
 
+import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerCollector
+import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.chuckerteam.chucker.api.RetentionManager
 import com.loftymr.whichone.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -37,9 +42,11 @@ object RemoteDataModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        httpLoggingInterceptor: HttpLoggingInterceptor
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        chuckInterceptor: ChuckerInterceptor
     ): OkHttpClient =
         OkHttpClient.Builder()
+            .addInterceptor(chuckInterceptor)
             .addInterceptor(httpLoggingInterceptor).build()
 
     @Singleton
@@ -51,4 +58,23 @@ object RemoteDataModule {
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
         setLevel(HttpLoggingInterceptor.Level.BASIC)
     }
+
+    @Singleton
+    @Provides
+    fun provideChuckerInterceptor(
+        @ApplicationContext context: Context,
+        chuckerCollector: ChuckerCollector
+    ): ChuckerInterceptor =
+        ChuckerInterceptor.Builder(context).collector(chuckerCollector)
+            .alwaysReadResponseBody(true).build()
+
+    @Singleton
+    @Provides
+    fun provideChuckerCollector(@ApplicationContext context: Context): ChuckerCollector = ChuckerCollector(
+        context = context,
+        // Toggles visibility of the push notification
+        showNotification = true,
+        // Allows to customize the retention period of collected data
+        retentionPeriod = RetentionManager.Period.ONE_HOUR
+    )
 }
