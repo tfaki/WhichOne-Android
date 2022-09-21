@@ -4,23 +4,23 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import com.loftymr.whichone.R
 import com.loftymr.whichone.feature.component.WhichOneButton
 import com.loftymr.whichone.feature.component.WhichOneTemplate
-import com.loftymr.whichone.R
+import com.loftymr.whichone.feature.theme.SurveyColor
 
 /**
  * Created by talhafaki on 10.09.2022.
@@ -62,16 +62,21 @@ fun ResultContent(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Image(
-            painter = rememberImagePainter(character),
-            contentDescription = "",
-            contentScale = ContentScale.Crop,
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
-                .shadow(elevation = 10.dp, shape = RoundedCornerShape(8.dp))
-                .clip(RoundedCornerShape(8.dp))
-        )
+                .height(400.dp)
+                .padding(16.dp),
+            elevation = CardDefaults.cardElevation(10.dp),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Image(
+                painter = rememberImagePainter(character),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
 
         Text(
             text = title,
@@ -79,8 +84,8 @@ fun ResultContent(
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            color = Color.White,
-            style = MaterialTheme.typography.h1.copy(color = Color.White, fontSize = 24.sp)
+            color = SurveyColor.White,
+            style = MaterialTheme.typography.h1.copy(color = SurveyColor.White, fontSize = 24.sp)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -90,8 +95,12 @@ fun ResultContent(
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            color = Color.White,
-            style = MaterialTheme.typography.body1.copy(color = Color.White.copy(0.5f), fontSize = 16.sp, textAlign = TextAlign.Center)
+            color = SurveyColor.White,
+            style = MaterialTheme.typography.body1.copy(
+                color = SurveyColor.White.copy(0.5f),
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center
+            )
         )
         Box(
             modifier = Modifier

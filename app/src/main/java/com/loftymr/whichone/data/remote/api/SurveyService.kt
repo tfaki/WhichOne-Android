@@ -10,7 +10,6 @@ import retrofit2.http.Query
  */
 
 interface SurveyService {
-
     @GET("")
     suspend fun getRingsOfThePowerSurveys(
         @Query("count") count: Int = 10

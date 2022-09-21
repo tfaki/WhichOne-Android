@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import com.loftymr.whichone.feature.theme.SurveyColor
 
 /**
  * Created by talhafaki on 13.09.2022.
@@ -32,14 +32,14 @@ fun CircularProgressAnimated(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(color = Color(0xFF3552A2)),
+            .background(color = SurveyColor.SolidBlue),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
             progress = progressAnimationValue,
             modifier = Modifier
                 .wrapContentSize(),
-            color = Color.White.copy(alpha = 0.8f)
+            color = SurveyColor.White.copy(alpha = 0.8f)
         )
     }
 }

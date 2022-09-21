@@ -1,7 +1,6 @@
 package com.loftymr.whichone.feature.theme
 
 import androidx.compose.material.Typography
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -21,18 +20,18 @@ val Typography = Typography(
         fontFamily = Fonts,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        color = Color.Black
+        color = SurveyColor.Black
     ),
     h1 = TextStyle(
         fontFamily = Fonts,
         fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
-        color = Color.Black
+        color = SurveyColor.Black
     ),
     body2 = TextStyle(
         fontFamily = Fonts,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        color = Color.Black
+        color = SurveyColor.Black
     )
 )

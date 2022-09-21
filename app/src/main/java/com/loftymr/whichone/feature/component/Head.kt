@@ -1,18 +1,20 @@
 package com.loftymr.whichone.feature.component
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.loftymr.whichone.feature.theme.SurveyColor
 
 /**
  * Created by talhafaki on 9.09.2022.
@@ -20,24 +22,34 @@ import coil.compose.rememberImagePainter
 
 @Composable
 fun Head(imageSource: String, numberOfSteps: Int, currentStep: Int) {
-    Image(
-        painter = rememberImagePainter(imageSource),
-        contentDescription = "",
-        contentScale = ContentScale.Crop,
+    val animatedProgress by animateFloatAsState(
+        targetValue = (currentStep + 1) / (numberOfSteps + 1).toFloat(),
+        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
+    )
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
-            .padding(16.dp)
-            .shadow(elevation = 10.dp, shape = RoundedCornerShape(8.dp))
-            .clip(RoundedCornerShape(8.dp))
-    )
+            .padding(16.dp),
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(10.dp)
+    ) {
+        Image(
+            painter = rememberImagePainter(imageSource),
+            contentDescription = "",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
+        )
+    }
     Spacer(modifier = Modifier.height(8.dp))
-    StepsProgressBar(
+    LinearProgressIndicator(
+        progress = animatedProgress,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        numberOfSteps = numberOfSteps,
-        currentStep = currentStep
+            .padding(horizontal = 20.dp),
+        color = SurveyColor.DeepBlue,
+        trackColor = SurveyColor.DeepBlue.copy(alpha = 0.12f),
     )
     Spacer(modifier = Modifier.height(12.dp))
 }

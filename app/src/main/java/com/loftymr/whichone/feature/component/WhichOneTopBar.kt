@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.loftymr.whichone.R
+import com.loftymr.whichone.feature.theme.SurveyColor
 
 /**
  * Created by talhafaki on 13.09.2022.
@@ -45,7 +46,7 @@ fun WhichOneTopBar(
 
         Text(
             text = title,
-            style = MaterialTheme.typography.body1.copy(color = Color.White),
+            style = MaterialTheme.typography.body1.copy(color = SurveyColor.White),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()

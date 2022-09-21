@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.loftymr.whichone.feature.theme.SurveyColor
 
 /**
  * Created by talhafaki on 13.09.2022.
@@ -35,8 +36,8 @@ fun StepsProgressBar(modifier: Modifier = Modifier, numberOfSteps: Int, currentS
 
 @Composable
 fun Step(modifier: Modifier = Modifier, isCompete: Boolean, isCurrent: Boolean) {
-    val color = if (isCompete || isCurrent) Color(0xFF3552A2) else Color.LightGray
-    val innerCircleColor = if (isCompete) Color(0xFF3552A2) else Color.LightGray
+    val color = if (isCompete || isCurrent) SurveyColor.SolidBlue else Color.LightGray
+    val innerCircleColor = if (isCompete) SurveyColor.SolidBlue else Color.LightGray
 
     Box(modifier = modifier) {
 

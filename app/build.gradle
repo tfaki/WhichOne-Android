@@ -93,6 +93,9 @@ dependencies {
     // Splash
     implementation "androidx.core:core-splashscreen:1.0.0"
 
+    // Compose Material 3
+    implementation "androidx.compose.material3:material3:1.0.0-alpha15"
+
     // Coil
     implementation "io.coil-kt:coil-compose:1.4.0"
 

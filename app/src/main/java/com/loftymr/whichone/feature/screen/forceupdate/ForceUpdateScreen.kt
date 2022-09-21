@@ -6,7 +6,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -15,6 +14,7 @@ import com.loftymr.whichone.R
 import com.loftymr.whichone.feature.component.WhichOneAnim
 import com.loftymr.whichone.feature.component.WhichOneButton
 import com.loftymr.whichone.feature.component.WhichOneTemplate
+import com.loftymr.whichone.feature.theme.SurveyColor
 
 /**
  * Created by talhafaki on 10.09.2022.
@@ -50,7 +50,7 @@ fun ForceUpdateContent(navigateToPlayStore: () -> Unit) {
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 4.dp),
-            style = MaterialTheme.typography.h1.copy(fontSize = 24.sp, color = Color.White)
+            style = MaterialTheme.typography.h1.copy(fontSize = 24.sp, color = SurveyColor.White)
         )
 
         Text(
@@ -62,7 +62,7 @@ fun ForceUpdateContent(navigateToPlayStore: () -> Unit) {
             style = MaterialTheme.typography.h1.copy(
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
-                color = Color(0xFFFEFEFE)
+                color = SurveyColor.Alabaster
             )
         )
 
