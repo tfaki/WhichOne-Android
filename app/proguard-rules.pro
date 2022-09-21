@@ -19,3 +19,39 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#OKHTTP
+ -keepattributes Signature
+ -keepattributes *Annotation*
+ -keep class okhttp3.** { *; }
+ -keep interface okhttp3.** { *; }
+ -dontwarn okhttp3.**
+ -dontwarn Java.nio.file.*
+
+ #Gson
+  -keep class com.google.gson.stream.** { *; }
+
+ #Retrofit
+  -keep class com.google.gson.** { *; }
+  -keep public class com.google.gson.** {public private protected *;}
+  -keep class com.google.inject.** { *; }
+  -keep class org.apache.http.** { *; }
+  -keep class org.apache.james.mime4j.** { *; }
+  -keep class javax.inject.** { *; }
+  -keep class javax.xml.stream.** { *; }
+  -keep class retrofit.** { *; }
+  -keep class com.google.appengine.** { *; }
+  -keepattributes *Annotation*
+  -keepattributes Signature
+  -dontwarn com.squareup.okhttp.*
+  -dontwarn javax.xml.stream.**
+  -dontwarn com.google.appengine.**
+  -dontwarn java.nio.file.**
+  -dontwarn org.codehaus.**
+
+  -keep class com.loftymr.whichone.feature.screen.splash.SplashActivity
+  -keep class com.loftymr.whichone.feature.screen.main.MainActivity
+  -keep class com.loftymr.whichone.data.model.Character
+  -keep class com.loftymr.whichone.data.model.Questions
+  -keep class com.loftymr.whichone.data.model.RingsOfThePowerResponse
+  -keep class com.loftymr.whichone.data.model.SrcSet

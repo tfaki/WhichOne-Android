@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">WhichOne</string>
+    <string name="ad_id_banner"></string> <!-- Test Ad -->
+    <string name="ad_test_id_banner">ca-app-pub-3940256099942544/6300978111</string> <!-- Test Ad -->
+    <string name="ad_id_interstitial"></string> <!-- Test Ad -->
+    <string name="ad_test_id_interstitial">ca-app-pub-3940256099942544/8691691433</string> <!-- Test Ad -->
+
+    <string name="something_went_wrong">Something went wrong!</string>
+    <string name="retry">RETRY</string>
+    <string name="again">AGAIN</string>
+
+    <!-- region Survey Screen -->
+    <string name="survey_title">Rings Of Power</string>
+    <!-- endregion -->
+
+    <!-- region Force Update Screen -->
+    <string name="new_version_available">New version available</string>
+    <string name="new_version_available_desc">Please, update app to new version to continue reposting.</string>
+    <string name="go_to_play_store">Go To Play Store</string>
+    <!-- endregion -->
 </resources>
