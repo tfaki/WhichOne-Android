@@ -5,14 +5,13 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.ui.Modifier
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.core.content.ContextCompat
+import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
+import com.loftymr.whichone.R
 import com.loftymr.whichone.feature.navigation.NavGraph
-import com.loftymr.whichone.feature.theme.WhichOneTheme
 import com.loftymr.whichone.util.ForceUpdateChecker
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,21 +31,17 @@ class MainActivity : ComponentActivity() {
 
             }).check()
         setContent {
-            WhichOneTheme(darkTheme = false) {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    NavGraph(
-                        updateURL = navigateURL,
-                        navigateToPlayStore = {
-                            redirectStore(navigateURL)
-                        }
-                    )
+            val isDark = isSystemInDarkTheme()
+            this.window.statusBarColor = ContextCompat.getColor(this, if (isDark) R.color.biscay else R.color.white)
+            val navController = rememberNavController()
+
+            NavGraph(
+                updateURL = navigateURL,
+                navController = navController,
+                navigateToPlayStore = {
+                    redirectStore(navigateURL)
                 }
-            }
+            )
         }
         MobileAds.initialize(this)
     }

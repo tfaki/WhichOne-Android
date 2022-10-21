@@ -14,13 +14,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.loftymr.whichone.feature.theme.SurveyColor
+import com.loftymr.whichone.feature.theme.getThemeValue
 
 /**
  * Created by talhafaki on 13.09.2022.
  */
 
 @Composable
-fun CircularProgressAnimated(modifier: Modifier = Modifier) {
+fun LoadingView(modifier: Modifier = Modifier) {
     val progressValue = 1f
     val infiniteTransition = rememberInfiniteTransition()
 
@@ -32,14 +33,22 @@ fun CircularProgressAnimated(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(color = SurveyColor.SolidBlue),
+            .background(
+                color = getThemeValue(
+                    darkValue = SurveyColor.Biscay,
+                    lightValue = SurveyColor.Transparent
+                )
+            ),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
             progress = progressAnimationValue,
             modifier = Modifier
                 .wrapContentSize(),
-            color = SurveyColor.White.copy(alpha = 0.8f)
+            color = getThemeValue(
+                darkValue = SurveyColor.LightGray,
+                lightValue = SurveyColor.Biscay
+            )
         )
     }
 }

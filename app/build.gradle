@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -87,7 +88,7 @@ dependencies {
     implementation "androidx.compose.material:material:1.2.1"
     implementation "androidx.compose.ui:ui-tooling:1.2.1"
     implementation "androidx.activity:activity-compose:1.5.1"
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha07"
+    implementation "androidx.navigation:navigation-compose:2.5.2"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
     // Splash

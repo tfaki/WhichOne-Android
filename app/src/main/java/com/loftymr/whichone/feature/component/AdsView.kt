@@ -62,7 +62,7 @@ fun loadInterstitial(context: Context, isFinished: (Boolean) -> Unit) {
         if (mInterstitialAd == null) {
             isFinished.invoke(true)
         }
-    }, 3500)
+    }, 4000)
 }
 
 fun showInterstitial(context: Context, isFinished: (Boolean) -> Unit) {

@@ -1,44 +1,21 @@
 package com.loftymr.whichone.feature.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 
-private val DarkColorPalette = darkColors(
-    primary = SurveyColor.Purple200,
-    primaryVariant = SurveyColor.Purple700,
-    secondary = SurveyColor.Teal200
-)
 
-private val LightColorPalette = lightColors(
-    primary = SurveyColor.Purple500,
-    primaryVariant = SurveyColor.Purple700,
-    secondary = SurveyColor.Teal200
+object WhichOneTheme {
+    val isDark: Boolean
+        @Composable get() = localDarkTheme.current
 
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
-)
+    val fontWhichOne: WhichOneTypo
+        @Composable get() = localFontStyleWhichOne.current
+}
+
+val localDarkTheme = compositionLocalOf<Boolean> { error("No DarkTheme info provided") }
+val localFontStyleWhichOne = compositionLocalOf<WhichOneTypo> { error("No WhichOne Font provided") }
 
 @Composable
-fun WhichOneTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
-
-    MaterialTheme(
-        colors = colors,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
+fun <T> getThemeValue(darkValue: T, lightValue: T): T {
+    return if (WhichOneTheme.isDark) darkValue else lightValue
 }
