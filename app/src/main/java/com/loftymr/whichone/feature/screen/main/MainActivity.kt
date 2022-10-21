@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
             }).check()
         setContent {
             val isDark = isSystemInDarkTheme()
-            this.window.statusBarColor = ContextCompat.getColor(this, if (isDark) R.color.biscay else R.color.white)
+            this.window.statusBarColor = ContextCompat.getColor(this, if (isDark) R.color.jordy_blue else R.color.white)
             val navController = rememberNavController()
 
             NavGraph(

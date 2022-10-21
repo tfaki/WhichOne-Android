@@ -43,10 +43,12 @@ fun Head(imageSource: String, questionText: String, numberOfSteps: Int, currentS
 
     Column(
         modifier = Modifier
-            .background(color = getThemeValue(
-                darkValue = SurveyColor.Biscay,
-                lightValue = SurveyColor.White
-            ))
+            .background(
+                color = getThemeValue(
+                    darkValue = SurveyColor.JordyBlue,
+                    lightValue = SurveyColor.White
+                )
+            )
     ) {
 
         Card(

@@ -57,9 +57,9 @@ private fun NavGraphBuilder.surveyNav(
             navigateToResult = { character ->
                 navController.navigateSafe(
                     WhichOneDirection.Result.routeResult(
-                        title = character.title.orEmpty(),
-                        desc = character.description.orEmpty(),
-                        imageSource = character.srcSet?.nineHundred.orEmpty()
+                        title = character?.title.orEmpty(),
+                        desc = character?.description.orEmpty(),
+                        imageSource = character?.srcSet?.nineHundred.orEmpty()
                     )
                 ) {
                     popUpTo(WhichOneDirection.Survey.route) {

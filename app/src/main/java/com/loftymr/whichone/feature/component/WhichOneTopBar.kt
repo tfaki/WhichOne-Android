@@ -33,7 +33,7 @@ fun WhichOneTopBar(
             .fillMaxWidth()
             .background(
                 color = getThemeValue(
-                    darkValue = SurveyColor.Biscay,
+                    darkValue = SurveyColor.JordyBlue,
                     lightValue = SurveyColor.White
                 )
             )

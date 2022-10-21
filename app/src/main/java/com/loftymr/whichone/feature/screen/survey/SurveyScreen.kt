@@ -57,7 +57,7 @@ import com.loftymr.whichone.feature.theme.getThemeValue
 @Composable
 fun SurveyScreen(
     viewModel: SurveyViewModel = hiltViewModel(),
-    navigateToResult: (Character) -> Unit
+    navigateToResult: (Character?) -> Unit
 ) {
     val viewState = viewModel.uiState.collectAsState().value
 
@@ -107,7 +107,7 @@ fun SurveyScreen(
 @Composable
 fun SurveyContent(
     data: RingsOfThePowerResponse,
-    showResult: (Character) -> Unit,
+    showResult: (Character?) -> Unit,
     adMob: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -120,6 +120,10 @@ fun SurveyContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = getThemeValue(
+                darkValue = SurveyColor.Biscay,
+                lightValue = SurveyColor.Alabaster
+            ))
             .verticalScroll(state = rememberScrollState())
     ) {
 
@@ -133,7 +137,7 @@ fun SurveyContent(
         AnimatedContent(
             targetState = questionState,
             transitionSpec = {
-                val animationSpec: TweenSpec<IntOffset> = tween(150)
+                val animationSpec: TweenSpec<IntOffset> = tween(200)
                 val direction =
                     if (targetState > initialState) {
                         AnimatedContentScope.SlideDirection.Left
@@ -155,7 +159,7 @@ fun SurveyContent(
                     .fillMaxSize()
                     .background(
                         color = getThemeValue(
-                            darkValue = SurveyColor.JordyBlue,
+                            darkValue = SurveyColor.Biscay,
                             lightValue = SurveyColor.Alabaster
                         )
                     )
@@ -176,11 +180,7 @@ fun SurveyContent(
                                         context = context,
                                         isFinished = {
                                             adMob.invoke(false)
-                                            showResult.invoke(
-                                                //data.character?.title.orEmpty(),
-                                                data.character!!,
-                                                //data.character?.description.orEmpty()
-                                            )
+                                            showResult.invoke(data.character)
                                         }
                                     )
                                 }
@@ -201,7 +201,7 @@ fun ErrorView(clickToRetry: () -> Unit) {
             .fillMaxSize()
             .background(
                 color = getThemeValue(
-                    darkValue = SurveyColor.Biscay,
+                    darkValue = SurveyColor.JordyBlue,
                     lightValue = SurveyColor.Alabaster
                 )
             ),
