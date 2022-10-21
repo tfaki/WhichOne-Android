@@ -2,11 +2,17 @@ package com.loftymr.whichone.feature.screen.result
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +27,8 @@ import com.loftymr.whichone.R
 import com.loftymr.whichone.feature.component.WhichOneButton
 import com.loftymr.whichone.feature.component.WhichOneTemplate
 import com.loftymr.whichone.feature.theme.SurveyColor
+import com.loftymr.whichone.feature.theme.WhichOneTheme
+import com.loftymr.whichone.feature.theme.getThemeValue
 
 /**
  * Created by talhafaki on 10.09.2022.
@@ -28,18 +36,18 @@ import com.loftymr.whichone.feature.theme.SurveyColor
 
 @Composable
 fun ResultScreen(
-    title: String = "",
-    character: String = "",
-    desc: String = "",
+    title: String?,
+    desc: String?,
+    imageSource: String?,
     navigateToSurvey: () -> Unit
 ) {
     WhichOneTemplate(
         topBar = {},
     ) {
         ResultContent(
-            title = title,
-            character = character,
-            desc = desc,
+            title = title.orEmpty(),
+            character = imageSource.orEmpty(),
+            desc = desc.orEmpty(),
             navigateToSurvey = {
                 navigateToSurvey.invoke()
             }
@@ -84,8 +92,14 @@ fun ResultContent(
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            color = SurveyColor.White,
-            style = MaterialTheme.typography.h1.copy(color = SurveyColor.White, fontSize = 24.sp)
+            color = getThemeValue(
+                darkValue = SurveyColor.Alabaster,
+                lightValue = SurveyColor.Nero
+            ),
+            style = WhichOneTheme.fontWhichOne.bold16.copy(
+                color = SurveyColor.Nero,
+                fontSize = 24.sp
+            )
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -95,9 +109,15 @@ fun ResultContent(
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            color = SurveyColor.White,
-            style = MaterialTheme.typography.body1.copy(
-                color = SurveyColor.White.copy(0.5f),
+            color = getThemeValue(
+                darkValue = SurveyColor.LightGray,
+                lightValue = SurveyColor.Nero
+            ),
+            style = WhichOneTheme.fontWhichOne.normal16.copy(
+                color = getThemeValue(
+                    darkValue = SurveyColor.LightGray,
+                    lightValue = SurveyColor.Nero.copy(0.5f)
+                ),
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center
             )

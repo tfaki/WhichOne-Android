@@ -8,6 +8,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.loftymr.whichone.feature.theme.SurveyColor
+import com.loftymr.whichone.feature.theme.getThemeValue
 
 /**
  * Created by talhafaki on 13.09.2022.
@@ -28,7 +29,12 @@ fun WhichOneTemplate(
             topBar = topBar,
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = SurveyColor.SolidBlue)
+                .background(
+                    color = getThemeValue(
+                        darkValue = SurveyColor.Biscay,
+                        lightValue = SurveyColor.White
+                    )
+                )
         )
     }
 }

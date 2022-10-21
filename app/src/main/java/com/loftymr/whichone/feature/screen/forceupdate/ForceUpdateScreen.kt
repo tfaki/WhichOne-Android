@@ -1,7 +1,14 @@
 package com.loftymr.whichone.feature.screen.forceupdate
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,6 +22,8 @@ import com.loftymr.whichone.feature.component.WhichOneAnim
 import com.loftymr.whichone.feature.component.WhichOneButton
 import com.loftymr.whichone.feature.component.WhichOneTemplate
 import com.loftymr.whichone.feature.theme.SurveyColor
+import com.loftymr.whichone.feature.theme.WhichOneTheme
+import com.loftymr.whichone.feature.theme.getThemeValue
 
 /**
  * Created by talhafaki on 10.09.2022.
@@ -50,7 +59,13 @@ fun ForceUpdateContent(navigateToPlayStore: () -> Unit) {
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 4.dp),
-            style = MaterialTheme.typography.h1.copy(fontSize = 24.sp, color = SurveyColor.White)
+            style = WhichOneTheme.fontWhichOne.bold16.copy(
+                fontSize = 24.sp,
+                color = getThemeValue(
+                    darkValue = SurveyColor.White,
+                    lightValue = SurveyColor.Biscay
+                )
+            )
         )
 
         Text(
@@ -59,17 +74,26 @@ fun ForceUpdateContent(navigateToPlayStore: () -> Unit) {
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            style = MaterialTheme.typography.h1.copy(
-                fontSize = 16.sp,
+            style = WhichOneTheme.fontWhichOne.bold16.copy(
                 textAlign = TextAlign.Center,
-                color = SurveyColor.Alabaster
+                color = getThemeValue(
+                    darkValue = SurveyColor.LightGray,
+                    lightValue = SurveyColor.JordyBlue
+                )
             )
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        WhichOneButton(buttonText = stringResource(id = R.string.go_to_play_store)) {
-            navigateToPlayStore.invoke()
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(bottom = 24.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            WhichOneButton(buttonText = stringResource(id = R.string.go_to_play_store)) {
+                navigateToPlayStore.invoke()
+            }
         }
     }
 }

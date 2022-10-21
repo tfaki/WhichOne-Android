@@ -9,6 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.loftymr.whichone.feature.theme.SurveyColor
+import com.loftymr.whichone.feature.theme.WhichOneTheme
+import com.loftymr.whichone.feature.theme.getThemeValue
 
 /**
  * Created by talhafaki on 13.09.2022.
@@ -28,16 +30,24 @@ fun WhichOneButton(modifier: Modifier = Modifier, buttonText: String, onClick: (
             onClick = { onClick.invoke() },
             modifier = Modifier
                 .fillMaxSize(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = SurveyColor.Alabaster)
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = getThemeValue(
+                    darkValue = SurveyColor.Navy,
+                    lightValue = SurveyColor.Bunker
+                )
+            )
         ) {
             Text(
                 text = buttonText,
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(align = Alignment.Center),
-                style = MaterialTheme.typography.h1.copy(
+                style = WhichOneTheme.fontWhichOne.bold16.copy(
                     fontSize = 18.sp,
-                    color = SurveyColor.SolidBlue
+                    color = getThemeValue(
+                        darkValue = SurveyColor.Biscay,
+                        lightValue = SurveyColor.White
+                    )
                 )
             )
         }

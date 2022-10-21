@@ -9,29 +9,46 @@ import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.with
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.loftymr.whichone.R
+import com.loftymr.whichone.data.model.Character
 import com.loftymr.whichone.data.model.RingsOfThePowerResponse
-import com.loftymr.whichone.data.model.SrcSet
-import com.loftymr.whichone.feature.component.*
+import com.loftymr.whichone.feature.component.Head
+import com.loftymr.whichone.feature.component.LoadingView
+import com.loftymr.whichone.feature.component.SelectionBox
+import com.loftymr.whichone.feature.component.WhichOneAnim
+import com.loftymr.whichone.feature.component.WhichOneButton
+import com.loftymr.whichone.feature.component.WhichOneTemplate
+import com.loftymr.whichone.feature.component.WhichOneTopBar
+import com.loftymr.whichone.feature.component.loadInterstitial
 import com.loftymr.whichone.feature.theme.SurveyColor
+import com.loftymr.whichone.feature.theme.WhichOneTheme
+import com.loftymr.whichone.feature.theme.getThemeValue
 
 /**
  * Created by talhafaki on 9.09.2022.
@@ -40,14 +57,15 @@ import com.loftymr.whichone.feature.theme.SurveyColor
 @Composable
 fun SurveyScreen(
     viewModel: SurveyViewModel = hiltViewModel(),
-    navigateToResult: (String, String, String) -> Unit
+    navigateToResult: (Character) -> Unit
 ) {
     val viewState = viewModel.uiState.collectAsState().value
 
     when {
         viewState.isLoading -> {
-            CircularProgressAnimated()
+            LoadingView()
         }
+
         viewState.isError -> {
             ErrorView(
                 clickToRetry = {
@@ -55,6 +73,7 @@ fun SurveyScreen(
                 }
             )
         }
+
         viewState.data != null -> {
             WhichOneTemplate(
                 topBar = {
@@ -66,8 +85,8 @@ fun SurveyScreen(
                 content = {
                     SurveyContent(
                         data = viewState.data,
-                        showResult = { title, srcSet, desc ->
-                            navigateToResult.invoke(title, srcSet?.nineHundred.orEmpty(), desc)
+                        showResult = { srcSet ->
+                            navigateToResult.invoke(srcSet)
                         },
                         adMob = {
                             viewModel.showLoading(it)
@@ -76,6 +95,7 @@ fun SurveyScreen(
                 }
             )
         }
+
         else -> {
             ErrorView {
                 viewModel.getRingsOfThePower()
@@ -87,7 +107,7 @@ fun SurveyScreen(
 @Composable
 fun SurveyContent(
     data: RingsOfThePowerResponse,
-    showResult: (String, SrcSet?, String) -> Unit,
+    showResult: (Character) -> Unit,
     adMob: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -97,98 +117,78 @@ fun SurveyContent(
     val questionState = remember(questionIndex) {
         questionIndex
     }
-    Card(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 8.dp, end = 8.dp, top = 36.dp, bottom = 8.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(SurveyColor.Alabaster),
-        elevation = CardDefaults.cardElevation(10.dp)
+            .verticalScroll(state = rememberScrollState())
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(state = rememberScrollState())
-        ) {
-            Head(
-                imageSource = data.backgroundPictures?.get(questionIndex).orEmpty(),
-                numberOfSteps = data.questions?.lastIndex ?: 0,
-                currentStep = questionIndex
-            )
 
-            AnimatedContent(
-                targetState = questionState,
-                transitionSpec = {
-                    val animationSpec: TweenSpec<IntOffset> = tween(150)
-                    val direction =
-                        if (targetState > initialState) {
-                            AnimatedContentScope.SlideDirection.Left
-                        } else {
-                            AnimatedContentScope.SlideDirection.Right
-                        }
-                    slideIntoContainer(
-                        towards = direction,
-                        animationSpec = animationSpec
-                    ) with
-                            slideOutOfContainer(
-                                towards = direction,
-                                animationSpec = animationSpec
-                            )
-                }
-            ) {
-                Column {
-                    Text(
-                        text = data.questions?.get(questionIndex)?.questionText.orEmpty(),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.CenterHorizontally)
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        style = MaterialTheme.typography.h1.copy(
-                            fontSize = 18.sp,
-                            color = SurveyColor.Black,
-                            textAlign = TextAlign.Center
-                        )
-                    )
+        Head(
+            imageSource = data.backgroundPictures?.get(0).orEmpty(),
+            questionText = data.questions?.get(questionIndex)?.questionText.orEmpty(),
+            numberOfSteps = data.questions?.size ?: 0,
+            currentStep = questionIndex + 1
+        )
 
-                    data.questions?.get(questionIndex)?.choices?.let { choices ->
-                        choices.forEach {
-                            SelectionBox(
-                                modifier = Modifier
-                                    .padding(horizontal = 12.dp),
-                                text = it,
-                                isSelected = {
-                                    if (questionIndex < data.questions.lastIndex) {
-                                        questionIndex++
-                                    } else {
-                                        adMob.invoke(true)
-                                        loadInterstitial(
-                                            context = context,
-                                            isFinished = {
-                                                adMob.invoke(false)
-                                                showResult.invoke(
-                                                    data.character?.title.orEmpty(),
-                                                    data.character?.srcSet,
-                                                    data.character?.description.orEmpty()
-                                                )
-                                            }
-                                        )
-                                    }
-                                }
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
+        AnimatedContent(
+            targetState = questionState,
+            transitionSpec = {
+                val animationSpec: TweenSpec<IntOffset> = tween(150)
+                val direction =
+                    if (targetState > initialState) {
+                        AnimatedContentScope.SlideDirection.Left
+                    } else {
+                        AnimatedContentScope.SlideDirection.Right
                     }
-                }
+                slideIntoContainer(
+                    towards = direction,
+                    animationSpec = animationSpec
+                ) with
+                        slideOutOfContainer(
+                            towards = direction,
+                            animationSpec = animationSpec
+                        )
             }
-
-            Box(
+        ) {
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 2.dp)
-                    .weight(1f),
-                contentAlignment = Alignment.BottomCenter
+                    .background(
+                        color = getThemeValue(
+                            darkValue = SurveyColor.JordyBlue,
+                            lightValue = SurveyColor.Alabaster
+                        )
+                    )
+                    .padding(top = 12.dp)
             ) {
-                AdvertView(modifier = Modifier.wrapContentSize())
+                data.questions?.get(questionIndex)?.choices?.let { choices ->
+                    choices.forEach {
+                        SelectionBox(
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp),
+                            text = it,
+                            isSelected = {
+                                if (questionIndex < data.questions.lastIndex) {
+                                    questionIndex++
+                                } else {
+                                    adMob.invoke(true)
+                                    loadInterstitial(
+                                        context = context,
+                                        isFinished = {
+                                            adMob.invoke(false)
+                                            showResult.invoke(
+                                                //data.character?.title.orEmpty(),
+                                                data.character!!,
+                                                //data.character?.description.orEmpty()
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }
@@ -199,7 +199,12 @@ fun ErrorView(clickToRetry: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = SurveyColor.SolidBlue),
+            .background(
+                color = getThemeValue(
+                    darkValue = SurveyColor.Biscay,
+                    lightValue = SurveyColor.Alabaster
+                )
+            ),
         verticalArrangement = Arrangement.Top
     ) {
         WhichOneAnim(rawResId = R.raw.opps_anim)
@@ -210,16 +215,28 @@ fun ErrorView(clickToRetry: () -> Unit) {
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp, vertical = 4.dp),
-            style = MaterialTheme.typography.h1.copy(
+            style = WhichOneTheme.fontWhichOne.bold16.copy(
                 fontSize = 24.sp,
-                color = SurveyColor.White
+                color = getThemeValue(
+                    darkValue = SurveyColor.White,
+                    lightValue = SurveyColor.Biscay
+                )
             )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        WhichOneButton(buttonText = stringResource(id = R.string.retry)) {
-            clickToRetry.invoke()
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(bottom = 16.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            WhichOneButton(
+                buttonText = stringResource(id = R.string.retry)
+            ) {
+                clickToRetry.invoke()
+            }
         }
     }
 }
