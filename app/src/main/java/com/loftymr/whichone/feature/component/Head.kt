@@ -15,10 +15,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -26,10 +29,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.loftymr.whichone.feature.theme.SurveyColor
 import com.loftymr.whichone.feature.theme.WhichOneTheme
 import com.loftymr.whichone.feature.theme.getThemeValue
+import com.loftymr.whichone.util.Util
 
 /**
  * Created by talhafaki on 9.09.2022.
@@ -41,14 +45,21 @@ fun Head(imageSource: String, questionText: String, numberOfSteps: Int, currentS
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
     )
 
+    val rootBackground = if (Util.isSupportsDynamic) {
+        getThemeValue(
+            darkValue = dynamicDarkColorScheme(LocalContext.current).onPrimary,
+            lightValue = dynamicLightColorScheme(LocalContext.current).onPrimary
+        )
+    } else {
+        getThemeValue(
+            darkValue = SurveyColor.JordyBlue,
+            lightValue = SurveyColor.White
+        )
+    }
+
     Column(
         modifier = Modifier
-            .background(
-                color = getThemeValue(
-                    darkValue = SurveyColor.JordyBlue,
-                    lightValue = SurveyColor.White
-                )
-            )
+            .background(color = rootBackground)
     ) {
 
         Card(
@@ -60,7 +71,7 @@ fun Head(imageSource: String, questionText: String, numberOfSteps: Int, currentS
             elevation = CardDefaults.cardElevation(10.dp)
         ) {
             Image(
-                painter = rememberImagePainter(imageSource),
+                painter = rememberAsyncImagePainter(imageSource),
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -116,14 +127,23 @@ fun Head(imageSource: String, questionText: String, numberOfSteps: Int, currentS
 
         Spacer(modifier = Modifier.height(4.dp))
 
+        val linearProgressColor = if (Util.isSupportsDynamic) {
+            getThemeValue(
+                darkValue = dynamicDarkColorScheme(LocalContext.current).inversePrimary,
+                lightValue = dynamicLightColorScheme(LocalContext.current).inversePrimary
+            )
+        } else {
+            getThemeValue(
+                darkValue = SurveyColor.DeepNavy,
+                lightValue = SurveyColor.Navy
+            )
+        }
+
         LinearProgressIndicator(
             progress = animatedProgress,
             modifier = Modifier
                 .fillMaxWidth(),
-            color = getThemeValue(
-                darkValue = SurveyColor.DeepNavy,
-                lightValue = SurveyColor.Navy
-            ),
+            color = linearProgressColor,
             trackColor = getThemeValue(
                 darkValue = SurveyColor.LightGray,
                 lightValue = SurveyColor.WhiteSmoke

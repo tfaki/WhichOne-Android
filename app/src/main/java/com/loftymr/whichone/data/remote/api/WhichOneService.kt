@@ -9,7 +9,7 @@ import retrofit2.http.Query
  * Created by talhafaki on 9.09.2022.
  */
 
-interface SurveyService {
+interface WhichOneService {
     @GET("")
     suspend fun getRingsOfThePowerSurveys(
         @Query("count") count: Int = 10

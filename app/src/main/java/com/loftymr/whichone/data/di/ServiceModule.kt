@@ -1,6 +1,6 @@
 package com.loftymr.whichone.data.di
 
-import com.loftymr.whichone.data.remote.api.SurveyService
+import com.loftymr.whichone.data.remote.api.WhichOneService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +16,6 @@ import retrofit2.Retrofit
 class ServiceModule {
 
     @Provides
-    fun provideSurveyService(retrofit: Retrofit): SurveyService =
-        retrofit.create(SurveyService::class.java)
+    fun provideSurveyService(retrofit: Retrofit): WhichOneService =
+        retrofit.create(WhichOneService::class.java)
 }

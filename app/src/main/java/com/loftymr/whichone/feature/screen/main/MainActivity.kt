@@ -5,12 +5,9 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.core.content.ContextCompat
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
-import com.loftymr.whichone.R
 import com.loftymr.whichone.feature.navigation.NavGraph
 import com.loftymr.whichone.util.ForceUpdateChecker
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,8 +28,6 @@ class MainActivity : ComponentActivity() {
 
             }).check()
         setContent {
-            val isDark = isSystemInDarkTheme()
-            this.window.statusBarColor = ContextCompat.getColor(this, if (isDark) R.color.jordy_blue else R.color.white)
             val navController = rememberNavController()
 
             NavGraph(

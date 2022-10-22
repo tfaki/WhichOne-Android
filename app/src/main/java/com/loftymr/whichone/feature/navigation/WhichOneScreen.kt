@@ -11,6 +11,7 @@ import kotlinx.parcelize.Parcelize
 enum class WhichOneScreen(
     val path: String
 ): Parcelable {
+    HOME("home"),
     SURVEY("survey"),
     RESULT("result"),
     FORCE_UPDATE("forceupdate")

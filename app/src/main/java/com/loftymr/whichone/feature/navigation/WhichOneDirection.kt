@@ -12,6 +12,13 @@ import com.loftymr.whichone.util.extension.urlEncoded
 sealed class WhichOneDirection(
     protected val whichOneScreen: WhichOneScreen
 ) {
+
+    object Home : WhichOneDirection(
+        whichOneScreen = WhichOneScreen.HOME
+    ) {
+        val route = whichOneScreen.path
+    }
+
     object Survey : WhichOneDirection(
         whichOneScreen = WhichOneScreen.SURVEY
     ) {

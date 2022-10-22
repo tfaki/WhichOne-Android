@@ -2,7 +2,7 @@ package com.loftymr.whichone.feature.screen.survey
 
 import androidx.lifecycle.viewModelScope
 import com.loftymr.whichone.data.remote.util.DataState
-import com.loftymr.whichone.domain.repository.SurveyRepository
+import com.loftymr.whichone.domain.repository.WhichOneRepository
 import com.loftymr.whichone.domain.viewstate.WhichOneViewEvent
 import com.loftymr.whichone.domain.viewstate.survey.SurveyViewState
 import com.loftymr.whichone.feature.base.BaseViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SurveyViewModel @Inject constructor(
-    private val surveyRepository: SurveyRepository
+    private val whichOneRepository: WhichOneRepository
 ) : BaseViewModel<SurveyViewState, SurveyViewEvent>() {
 
     init {
@@ -28,7 +28,7 @@ class SurveyViewModel @Inject constructor(
         viewModelScope.launch {
             setState { currentState.copy(isLoading = true) }
             delay(2000)
-            surveyRepository.ringsOfThePowerSurvey().collect {
+            whichOneRepository.ringsOfThePowerSurvey().collect {
                 when (it) {
                     is DataState.Success -> {
                         setState {

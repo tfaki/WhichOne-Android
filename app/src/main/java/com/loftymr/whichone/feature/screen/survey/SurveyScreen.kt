@@ -17,10 +17,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.loftymr.whichone.R
 import com.loftymr.whichone.data.model.Character
 import com.loftymr.whichone.data.model.RingsOfThePowerResponse
+import com.loftymr.whichone.feature.component.AdvertView
 import com.loftymr.whichone.feature.component.Head
 import com.loftymr.whichone.feature.component.LoadingView
 import com.loftymr.whichone.feature.component.SelectionBox
@@ -49,6 +53,7 @@ import com.loftymr.whichone.feature.component.loadInterstitial
 import com.loftymr.whichone.feature.theme.SurveyColor
 import com.loftymr.whichone.feature.theme.WhichOneTheme
 import com.loftymr.whichone.feature.theme.getThemeValue
+import com.loftymr.whichone.util.Util
 
 /**
  * Created by talhafaki on 9.09.2022.
@@ -59,6 +64,7 @@ fun SurveyScreen(
     viewModel: SurveyViewModel = hiltViewModel(),
     navigateToResult: (Character?) -> Unit
 ) {
+    Util.setStatusBar()
     val viewState = viewModel.uiState.collectAsState().value
 
     when {
@@ -117,13 +123,21 @@ fun SurveyContent(
     val questionState = remember(questionIndex) {
         questionIndex
     }
+    val rootBackground = if (Util.isSupportsDynamic) {
+        getThemeValue(
+            darkValue = dynamicDarkColorScheme(LocalContext.current).onSecondary,
+            lightValue = dynamicLightColorScheme(LocalContext.current).onSecondary
+        )
+    } else {
+        getThemeValue(
+            darkValue = SurveyColor.Biscay,
+            lightValue = SurveyColor.Alabaster
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = getThemeValue(
-                darkValue = SurveyColor.Biscay,
-                lightValue = SurveyColor.Alabaster
-            ))
+            .background(color = rootBackground)
             .verticalScroll(state = rememberScrollState())
     ) {
 
@@ -157,12 +171,7 @@ fun SurveyContent(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(
-                        color = getThemeValue(
-                            darkValue = SurveyColor.Biscay,
-                            lightValue = SurveyColor.Alabaster
-                        )
-                    )
+                    .background(color = rootBackground)
                     .padding(top = 12.dp)
             ) {
                 data.questions?.get(questionIndex)?.choices?.let { choices ->
@@ -188,6 +197,15 @@ fun SurveyContent(
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 2.dp)
+                        .weight(1f),
+                    contentAlignment = Alignment.BottomCenter
+                ) {
+                    AdvertView(modifier = Modifier.wrapContentSize())
                 }
             }
         }
