@@ -44,7 +44,7 @@ fun SelectionBox(
 ) {
     val color = remember { Animatable(SurveyColor.Transparent) }
     var isClicked by remember { mutableStateOf(false) }
-     val animateColor = if (Util.isSupportsDynamic) {
+    val animateColor = if (Util.isSupportsDynamic) {
         getThemeValue(
             darkValue = dynamicDarkColorScheme(LocalContext.current).inversePrimary,
             lightValue = dynamicLightColorScheme(LocalContext.current).inversePrimary
@@ -68,10 +68,12 @@ fun SelectionBox(
     val backgroundColor = if (isClicked) {
         color.value
     } else {
-        if(Util.isSupportsDynamic) {
-            SurveyColor.Transparent
+        if (Util.isSupportsDynamic) {
+            getThemeValue(
+                darkValue = dynamicDarkColorScheme(LocalContext.current).secondaryContainer,
+                lightValue = dynamicLightColorScheme(LocalContext.current).secondaryContainer
+            )
         } else {
-
             getThemeValue(
                 darkValue = SurveyColor.JordyBlue,
                 lightValue = SurveyColor.White
@@ -86,11 +88,13 @@ fun SelectionBox(
     val textColor = if (isClicked) {
         getThemeValue(
             darkValue = SurveyColor.White,
-            lightValue = SurveyColor.White)
+            lightValue = SurveyColor.White
+        )
     } else {
         getThemeValue(
             darkValue = SurveyColor.LightGray,
-            lightValue = SurveyColor.BlackSmoke)
+            lightValue = SurveyColor.BlackSmoke
+        )
     }
     Card(
         modifier = modifier

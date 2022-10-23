@@ -24,8 +24,20 @@ import com.loftymr.whichone.util.Util
 fun WhichOneButton(modifier: Modifier = Modifier, buttonText: String, onClick: () -> Unit) {
     val buttonBackground = if (Util.isSupportsDynamic) {
         getThemeValue(
-            darkValue = dynamicDarkColorScheme(LocalContext.current).inversePrimary,
-            lightValue = dynamicLightColorScheme(LocalContext.current).inversePrimary
+            darkValue = dynamicDarkColorScheme(LocalContext.current).secondaryContainer,
+            lightValue = dynamicLightColorScheme(LocalContext.current).secondaryContainer
+        )
+    } else {
+        getThemeValue(
+            darkValue = SurveyColor.Navy,
+            lightValue = SurveyColor.Bunker
+        )
+    }
+
+    val buttonTextBackground = if (Util.isSupportsDynamic) {
+        getThemeValue(
+            darkValue = dynamicDarkColorScheme(LocalContext.current).primary,
+            lightValue = dynamicLightColorScheme(LocalContext.current).primary
         )
     } else {
         getThemeValue(
@@ -56,10 +68,7 @@ fun WhichOneButton(modifier: Modifier = Modifier, buttonText: String, onClick: (
                     .wrapContentSize(align = Alignment.Center),
                 style = WhichOneTheme.fontWhichOne.bold16.copy(
                     fontSize = 18.sp,
-                    color = getThemeValue(
-                        darkValue = SurveyColor.Biscay,
-                        lightValue = SurveyColor.White
-                    )
+                    color = buttonTextBackground
                 )
             )
         }

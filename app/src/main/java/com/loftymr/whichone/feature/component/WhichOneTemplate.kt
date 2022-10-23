@@ -25,8 +25,8 @@ fun WhichOneTemplate(
 ) {
     val color = if (Util.isSupportsDynamic) {
         getThemeValue(
-            darkValue = dynamicDarkColorScheme(LocalContext.current).onPrimary,
-            lightValue = dynamicLightColorScheme(LocalContext.current).onPrimary
+            darkValue = dynamicDarkColorScheme(LocalContext.current).surface,
+            lightValue = dynamicLightColorScheme(LocalContext.current).surface
         )
     } else {
         getThemeValue(

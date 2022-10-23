@@ -20,8 +20,8 @@ object Util {
     fun setStatusBar() {
         val statusBarColor = if (isSupportsDynamic) {
             getThemeValue(
-                darkValue = dynamicDarkColorScheme(LocalContext.current).onPrimary,
-                lightValue = dynamicLightColorScheme(LocalContext.current).onPrimary
+                darkValue = dynamicDarkColorScheme(LocalContext.current).surface,
+                lightValue = dynamicLightColorScheme(LocalContext.current).surface
             )
         } else {
             getThemeValue(

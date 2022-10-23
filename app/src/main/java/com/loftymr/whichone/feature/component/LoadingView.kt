@@ -36,8 +36,8 @@ fun LoadingView(modifier: Modifier = Modifier) {
 
     val backgroundColor = if (Util.isSupportsDynamic) {
         getThemeValue(
-            darkValue = dynamicDarkColorScheme(LocalContext.current).onPrimary,
-            lightValue = dynamicLightColorScheme(LocalContext.current).onPrimary
+            darkValue = dynamicDarkColorScheme(LocalContext.current).surface,
+            lightValue = dynamicLightColorScheme(LocalContext.current).surface
         )
     } else {
         getThemeValue(

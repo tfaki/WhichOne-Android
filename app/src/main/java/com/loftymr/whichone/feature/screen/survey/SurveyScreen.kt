@@ -125,8 +125,8 @@ fun SurveyContent(
     }
     val rootBackground = if (Util.isSupportsDynamic) {
         getThemeValue(
-            darkValue = dynamicDarkColorScheme(LocalContext.current).onSecondary,
-            lightValue = dynamicLightColorScheme(LocalContext.current).onSecondary
+            darkValue = dynamicDarkColorScheme(LocalContext.current).surface,
+            lightValue = dynamicLightColorScheme(LocalContext.current).surface
         )
     } else {
         getThemeValue(
