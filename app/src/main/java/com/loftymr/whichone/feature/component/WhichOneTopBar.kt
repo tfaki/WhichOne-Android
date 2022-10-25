@@ -6,12 +6,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -47,29 +49,40 @@ fun WhichOneTopBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = backgroundColor)
+            .padding(bottom = 16.dp)
     ) {
         if (backButtonEnabled) {
             Image(
                 painter = painterResource(id = R.drawable.ic_back_arrow),
                 contentDescription = "",
                 modifier = Modifier
+                    .size(36.dp)
                     .align(Alignment.TopStart)
                     .padding(start = 16.dp)
                     .clickable {
                         clickBack.invoke()
-                    }
+                    },
+                colorFilter = ColorFilter.tint(
+                    color = getThemeValue(
+                        darkValue = SurveyColor.White,
+                        lightValue = SurveyColor.Nero
+                    )
+                )
             )
         }
 
         Text(
             text = title,
-            style = WhichOneTheme.fontWhichOne.normal16.copy(color = getThemeValue(
-                darkValue = SurveyColor.White,
-                lightValue = SurveyColor.Nero
-            )),
+            style = WhichOneTheme.fontWhichOne.normal16.copy(
+                color = getThemeValue(
+                    darkValue = SurveyColor.White,
+                    lightValue = SurveyColor.Nero
+                )
+            ),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(horizontal = 48.dp)
                 .align(Alignment.Center)
         )
     }

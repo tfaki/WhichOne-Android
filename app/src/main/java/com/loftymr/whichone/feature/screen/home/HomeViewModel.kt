@@ -1,36 +1,40 @@
-package com.loftymr.whichone.feature.screen.survey
+package com.loftymr.whichone.feature.screen.home
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.loftymr.whichone.data.remote.util.DataState
 import com.loftymr.whichone.domain.repository.WhichOneRepository
 import com.loftymr.whichone.domain.viewstate.WhichOneViewEvent
-import com.loftymr.whichone.domain.viewstate.survey.SurveyViewState
+import com.loftymr.whichone.domain.viewstate.home.HomeViewState
 import com.loftymr.whichone.feature.base.BaseViewModel
-import com.loftymr.whichone.util.AppCache
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * Created by talhafaki on 9.09.2022.
+ * Created by talhafaki on 25.10.2022.
  */
 
 @HiltViewModel
-class SurveyViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val whichOneRepository: WhichOneRepository,
-    val appCache: AppCache
-) : BaseViewModel<SurveyViewState, SurveyViewEvent>() {
+    private val savedStateHandle: SavedStateHandle
+) : BaseViewModel<HomeViewState, HomeViewEvent>() {
 
-    fun getSurvey(id: String) {
+    init {
+        getCategories()
+    }
+
+    fun getCategories() {
         viewModelScope.launch {
             setState { currentState.copy(isLoading = true) }
             delay(2000)
-            whichOneRepository.getSurvey(id = id).collect {
+            whichOneRepository.getCategories().collect {
                 when (it) {
                     is DataState.Success -> {
                         setState {
-                            if (it.data.character != null && !it.data.questions.isNullOrEmpty() && it.data.backgroundPictures?.isNotEmpty() == true) {
+                            if (it.data.isNotEmpty()) {
                                 currentState.copy(
                                     data = it.data,
                                     isLoading = false,
@@ -52,16 +56,9 @@ class SurveyViewModel @Inject constructor(
         }
     }
 
-    fun showLoading(hasLoading: Boolean) {
-        if (hasLoading) {
-            setState { currentState.copy(isLoading = true) }
-        } else {
-            setState { currentState.copy(isLoading = false) }
-        }
-    }
+    override fun createInitialState(): HomeViewState = HomeViewState()
+    override fun onTriggerEvent(event: HomeViewEvent) {}
 
-    override fun createInitialState(): SurveyViewState = SurveyViewState()
-    override fun onTriggerEvent(event: SurveyViewEvent) {}
 }
 
-sealed class SurveyViewEvent : WhichOneViewEvent {}
+sealed class HomeViewEvent : WhichOneViewEvent

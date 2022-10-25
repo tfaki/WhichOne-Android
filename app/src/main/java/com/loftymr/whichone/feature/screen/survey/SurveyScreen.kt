@@ -19,8 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -40,13 +39,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.loftymr.whichone.R
 import com.loftymr.whichone.data.model.Character
-import com.loftymr.whichone.data.model.RingsOfThePowerResponse
+import com.loftymr.whichone.data.model.SurveyResponse
 import com.loftymr.whichone.feature.component.AdvertView
 import com.loftymr.whichone.feature.component.Head
 import com.loftymr.whichone.feature.component.LoadingView
 import com.loftymr.whichone.feature.component.SelectionBox
 import com.loftymr.whichone.feature.component.WhichOneAnim
 import com.loftymr.whichone.feature.component.WhichOneButton
+import com.loftymr.whichone.feature.component.WhichOneLaunchedEffect
 import com.loftymr.whichone.feature.component.WhichOneTemplate
 import com.loftymr.whichone.feature.component.WhichOneTopBar
 import com.loftymr.whichone.feature.component.loadInterstitial
@@ -62,9 +62,15 @@ import com.loftymr.whichone.util.Util
 @Composable
 fun SurveyScreen(
     viewModel: SurveyViewModel = hiltViewModel(),
-    navigateToResult: (Character?) -> Unit
+    title: String,
+    id: String,
+    navigateToResult: (Character?) -> Unit,
+    clickToBack: () -> Unit
 ) {
-    Util.setStatusBar()
+    WhichOneLaunchedEffect {
+        viewModel.getSurvey(id)
+    }
+
     val viewState = viewModel.uiState.collectAsState().value
 
     when {
@@ -75,7 +81,7 @@ fun SurveyScreen(
         viewState.isError -> {
             ErrorView(
                 clickToRetry = {
-                    viewModel.getRingsOfThePower()
+                    viewModel.getSurvey(id)
                 }
             )
         }
@@ -84,14 +90,19 @@ fun SurveyScreen(
             WhichOneTemplate(
                 topBar = {
                     WhichOneTopBar(
-                        title = stringResource(id = R.string.survey_title),
-                        backButtonEnabled = false
+                        title = title,
+                        backButtonEnabled = true,
+                        clickBack = {
+                            clickToBack.invoke()
+                        }
                     )
                 },
                 content = {
                     SurveyContent(
                         data = viewState.data,
-                        showResult = { srcSet ->
+                        navigateToResult = { srcSet ->
+                            viewModel.appCache.surveyId = id
+                            viewModel.appCache.surveyTitle = title
                             navigateToResult.invoke(srcSet)
                         },
                         adMob = {
@@ -104,7 +115,7 @@ fun SurveyScreen(
 
         else -> {
             ErrorView {
-                viewModel.getRingsOfThePower()
+                viewModel.getSurvey(id)
             }
         }
     }
@@ -112,8 +123,8 @@ fun SurveyScreen(
 
 @Composable
 fun SurveyContent(
-    data: RingsOfThePowerResponse,
-    showResult: (Character?) -> Unit,
+    data: SurveyResponse,
+    navigateToResult: (Character?) -> Unit,
     adMob: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -134,78 +145,81 @@ fun SurveyContent(
             lightValue = SurveyColor.Alabaster
         )
     }
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(color = rootBackground)
-            .verticalScroll(state = rememberScrollState())
     ) {
 
-        Head(
-            imageSource = data.backgroundPictures?.get(0).orEmpty(),
-            questionText = data.questions?.get(questionIndex)?.questionText.orEmpty(),
-            numberOfSteps = data.questions?.size ?: 0,
-            currentStep = questionIndex + 1
-        )
+        item {
+            Head(
+                imageSource = data.backgroundPictures?.get(0).orEmpty(),
+                questionText = data.questions?.get(questionIndex)?.questionText.orEmpty(),
+                numberOfSteps = data.questions?.size ?: 0,
+                currentStep = questionIndex + 1
+            )
+        }
 
-        AnimatedContent(
-            targetState = questionState,
-            transitionSpec = {
-                val animationSpec: TweenSpec<IntOffset> = tween(200)
-                val direction =
-                    if (targetState > initialState) {
-                        AnimatedContentScope.SlideDirection.Left
-                    } else {
-                        AnimatedContentScope.SlideDirection.Right
-                    }
-                slideIntoContainer(
-                    towards = direction,
-                    animationSpec = animationSpec
-                ) with
-                        slideOutOfContainer(
-                            towards = direction,
-                            animationSpec = animationSpec
-                        )
-            }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = rootBackground)
-                    .padding(top = 12.dp)
-            ) {
-                data.questions?.get(questionIndex)?.choices?.let { choices ->
-                    choices.forEach {
-                        SelectionBox(
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp),
-                            text = it,
-                            isSelected = {
-                                if (questionIndex < data.questions.lastIndex) {
-                                    questionIndex++
-                                } else {
-                                    adMob.invoke(true)
-                                    loadInterstitial(
-                                        context = context,
-                                        isFinished = {
-                                            adMob.invoke(false)
-                                            showResult.invoke(data.character)
-                                        }
-                                    )
-                                }
-                            }
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
+        item {
+            AnimatedContent(
+                targetState = questionState,
+                transitionSpec = {
+                    val animationSpec: TweenSpec<IntOffset> = tween(200)
+                    val direction =
+                        if (targetState > initialState) {
+                            AnimatedContentScope.SlideDirection.Left
+                        } else {
+                            AnimatedContentScope.SlideDirection.Right
+                        }
+                    slideIntoContainer(
+                        towards = direction,
+                        animationSpec = animationSpec
+                    ) with
+                            slideOutOfContainer(
+                                towards = direction,
+                                animationSpec = animationSpec
+                            )
                 }
-                Box(
+            ) {
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(bottom = 2.dp)
-                        .weight(1f),
-                    contentAlignment = Alignment.BottomCenter
+                        .background(color = rootBackground)
+                        .padding(top = 12.dp)
                 ) {
-                    AdvertView(modifier = Modifier.wrapContentSize())
+                    data.questions?.get(questionIndex)?.choices?.let { choices ->
+                        choices.forEach {
+                            SelectionBox(
+                                modifier = Modifier
+                                    .padding(horizontal = 12.dp),
+                                text = it,
+                                isSelected = {
+                                    if (questionIndex < data.questions.lastIndex) {
+                                        questionIndex++
+                                    } else {
+                                        adMob.invoke(true)
+                                        loadInterstitial(
+                                            context = context,
+                                            isFinished = {
+                                                adMob.invoke(false)
+                                                navigateToResult.invoke(data.character)
+                                            }
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 2.dp)
+                            .weight(1f),
+                        contentAlignment = Alignment.BottomCenter
+                    ) {
+                        AdvertView(modifier = Modifier.wrapContentSize())
+                    }
                 }
             }
         }
@@ -251,7 +265,18 @@ fun ErrorView(clickToRetry: () -> Unit) {
             contentAlignment = Alignment.BottomCenter
         ) {
             WhichOneButton(
-                buttonText = stringResource(id = R.string.retry)
+                buttonText = stringResource(id = R.string.retry),
+                buttonBackground = if (Util.isSupportsDynamic) {
+                    getThemeValue(
+                        darkValue = dynamicDarkColorScheme(LocalContext.current).secondaryContainer,
+                        lightValue = dynamicLightColorScheme(LocalContext.current).secondaryContainer
+                    )
+                } else {
+                    getThemeValue(
+                        darkValue = SurveyColor.Navy,
+                        lightValue = SurveyColor.Bunker
+                    )
+                }
             ) {
                 clickToRetry.invoke()
             }

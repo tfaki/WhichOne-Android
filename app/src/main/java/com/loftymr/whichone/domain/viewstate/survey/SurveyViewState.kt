@@ -1,6 +1,6 @@
 package com.loftymr.whichone.domain.viewstate.survey
 
-import com.loftymr.whichone.data.model.RingsOfThePowerResponse
+import com.loftymr.whichone.data.model.SurveyResponse
 import com.loftymr.whichone.domain.viewstate.WhichOneViewState
 
 /**
@@ -10,5 +10,5 @@ import com.loftymr.whichone.domain.viewstate.WhichOneViewState
 data class SurveyViewState(
     var isLoading: Boolean = false,
     val isError: Boolean = false,
-    val data: RingsOfThePowerResponse? = null
+    val data: SurveyResponse? = null
 ) : WhichOneViewState

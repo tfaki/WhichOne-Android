@@ -2,7 +2,6 @@ package com.loftymr.whichone.feature.screen.result
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,25 +9,32 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.rememberAsyncImagePainter
 import com.loftymr.whichone.R
 import com.loftymr.whichone.feature.component.WhichOneButton
 import com.loftymr.whichone.feature.component.WhichOneTemplate
 import com.loftymr.whichone.feature.theme.SurveyColor
 import com.loftymr.whichone.feature.theme.WhichOneTheme
 import com.loftymr.whichone.feature.theme.getThemeValue
+import com.loftymr.whichone.util.Util
 
 /**
  * Created by talhafaki on 10.09.2022.
@@ -39,7 +45,9 @@ fun ResultScreen(
     title: String?,
     desc: String?,
     imageSource: String?,
-    navigateToSurvey: () -> Unit
+    viewModel: ResultViewModel = hiltViewModel(),
+    navigateToSurvey: (String, String) -> Unit,
+    navigateToHome: () -> Unit
 ) {
     WhichOneTemplate(
         topBar = {},
@@ -49,12 +57,21 @@ fun ResultScreen(
             character = imageSource.orEmpty(),
             desc = desc.orEmpty(),
             navigateToSurvey = {
-                navigateToSurvey.invoke()
+                navigateToSurvey.invoke(
+                    viewModel.appCache.surveyId.orEmpty(),
+                    viewModel.appCache.surveyTitle.orEmpty()
+                )
+            },
+            navigateToHome = {
+                navigateToHome.invoke()
             }
         )
     }
     BackHandler {
-        navigateToSurvey.invoke()
+        navigateToSurvey.invoke(
+            viewModel.appCache.surveyId.orEmpty(),
+            viewModel.appCache.surveyTitle.orEmpty()
+        )
     }
 }
 
@@ -64,22 +81,24 @@ fun ResultContent(
     title: String = "",
     desc: String = "",
     character: String = "",
-    navigateToSurvey: () -> Unit
+    navigateToSurvey: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(state = rememberScrollState())
     ) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(400.dp)
+                .height(300.dp)
                 .padding(16.dp),
             elevation = CardDefaults.cardElevation(10.dp),
             shape = RoundedCornerShape(8.dp)
         ) {
             Image(
-                painter = rememberImagePainter(character),
+                painter = rememberAsyncImagePainter(character),
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
@@ -102,7 +121,7 @@ fun ResultContent(
             )
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = desc,
             modifier = Modifier
@@ -122,14 +141,44 @@ fun ResultContent(
                 textAlign = TextAlign.Center
             )
         )
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 24.dp),
-            contentAlignment = Alignment.BottomCenter
+                .padding(bottom = 8.dp, top = 24.dp)
         ) {
-            WhichOneButton(buttonText = stringResource(id = R.string.again)) {
+            WhichOneButton(
+                buttonText = stringResource(id = R.string.again),
+                buttonBackground = if (Util.isSupportsDynamic) {
+                    getThemeValue(
+                        darkValue = dynamicDarkColorScheme(LocalContext.current).secondaryContainer,
+                        lightValue = dynamicLightColorScheme(LocalContext.current).secondaryContainer
+                    )
+                } else {
+                    getThemeValue(
+                        darkValue = SurveyColor.Navy,
+                        lightValue = SurveyColor.Bunker
+                    )
+                }
+            ) {
                 navigateToSurvey.invoke()
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            WhichOneButton(
+                buttonText = stringResource(id = R.string.home),
+                buttonBackground = if (Util.isSupportsDynamic) {
+                    getThemeValue(
+                        darkValue = dynamicDarkColorScheme(LocalContext.current).secondaryContainer,
+                        lightValue = dynamicLightColorScheme(LocalContext.current).secondaryContainer
+                    )
+                } else {
+                    getThemeValue(
+                        darkValue = SurveyColor.White,
+                        lightValue = SurveyColor.DeepNavy
+                    )
+                }
+            ) {
+                navigateToHome.invoke()
             }
         }
     }

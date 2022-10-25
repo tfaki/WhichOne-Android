@@ -65,7 +65,7 @@ fun Head(imageSource: String, questionText: String, numberOfSteps: Int, currentS
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp)
+                .height(275.dp)
                 .padding(16.dp),
             shape = RoundedCornerShape(8.dp),
             elevation = CardDefaults.cardElevation(10.dp)
@@ -73,7 +73,7 @@ fun Head(imageSource: String, questionText: String, numberOfSteps: Int, currentS
             Image(
                 painter = rememberAsyncImagePainter(imageSource),
                 contentDescription = "",
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .fillMaxSize()
             )

@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.loftymr.whichone.feature.screen.forceupdate.ForceUpdateScreen
+import com.loftymr.whichone.feature.screen.home.HomeScreen
 import com.loftymr.whichone.feature.screen.result.ResultScreen
 import com.loftymr.whichone.feature.screen.survey.SurveyScreen
 import com.loftymr.whichone.feature.theme.Inter
@@ -40,8 +41,9 @@ fun NavGraph(
     ) {
         NavHost(
             navController = navController,
-            startDestination = if (updateURL.isEmpty()) WhichOneDirection.Survey.route else WhichOneDirection.ForceUpdate.route,
+            startDestination = if (updateURL.isEmpty()) WhichOneDirection.Home.route else WhichOneDirection.ForceUpdate.route,
         ) {
+            homeNav(navController)
             surveyNav(navController)
             resultNav(navController)
             forceUpdateNav(navController, navigateToPlayStore)
@@ -49,23 +51,44 @@ fun NavGraph(
     }
 }
 
+private fun NavGraphBuilder.homeNav(
+    navController: NavHostController
+) {
+    composable(route = WhichOneDirection.Home.route) {
+        HomeScreen(
+            navigateToSurvey = {
+                navController.navigateSafe(
+                    WhichOneDirection.Survey.routeSurvey(
+                        it.title.orEmpty(),
+                        it.catId.orEmpty()
+                    )
+                ) {}
+            }
+        )
+    }
+}
+
 private fun NavGraphBuilder.surveyNav(
     navController: NavHostController
 ) {
-    composable(route = WhichOneDirection.Survey.route) {
+    composable(
+        route = WhichOneDirection.Survey.routeWithData,
+        arguments = WhichOneDirection.Survey.arguments
+    ) {
         SurveyScreen(
+            id = WhichOneDirection.Survey.getId(it),
+            title = WhichOneDirection.Survey.getTitle(it),
             navigateToResult = { character ->
                 navController.navigateSafe(
                     WhichOneDirection.Result.routeResult(
                         title = character?.title.orEmpty(),
-                        desc = character?.description.orEmpty(),
-                        imageSource = character?.srcSet?.nineHundred.orEmpty()
+                        desc = character?.descriptionReason.orEmpty(),
+                        imageSource = character?.srcSet.orEmpty()
                     )
-                ) {
-                    popUpTo(WhichOneDirection.Survey.route) {
-                        inclusive = true
-                    }
-                }
+                ) {}
+            },
+            clickToBack = {
+                navController.popBackStack()
             }
         )
     }
@@ -82,8 +105,22 @@ private fun NavGraphBuilder.resultNav(
             title = WhichOneDirection.Result.getTitle(it),
             desc = WhichOneDirection.Result.getDesc(it),
             imageSource = WhichOneDirection.Result.getImageSource(it),
-            navigateToSurvey = {
-                navController.navigate(WhichOneDirection.Survey.route)
+            navigateToSurvey = { surveyId, surveyTitle ->
+                navController.navigateSafe(
+                    WhichOneDirection.Survey.routeSurvey(
+                        title = surveyTitle,
+                        id = surveyId
+                    )
+                ) {}
+            },
+            navigateToHome = {
+                navController.navigateSafe(
+                    WhichOneDirection.Home.route
+                ){
+                    popUpTo(WhichOneDirection.Home.route){
+                        inclusive = true
+                    }
+                }
             }
         )
     }

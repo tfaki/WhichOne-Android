@@ -10,9 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.Text
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -24,6 +27,7 @@ import com.loftymr.whichone.feature.component.WhichOneTemplate
 import com.loftymr.whichone.feature.theme.SurveyColor
 import com.loftymr.whichone.feature.theme.WhichOneTheme
 import com.loftymr.whichone.feature.theme.getThemeValue
+import com.loftymr.whichone.util.Util
 
 /**
  * Created by talhafaki on 10.09.2022.
@@ -91,7 +95,20 @@ fun ForceUpdateContent(navigateToPlayStore: () -> Unit) {
                 .padding(bottom = 24.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            WhichOneButton(buttonText = stringResource(id = R.string.go_to_play_store)) {
+            WhichOneButton(
+                buttonText = stringResource(id = R.string.go_to_play_store),
+                buttonBackground = if (Util.isSupportsDynamic) {
+                    getThemeValue(
+                        darkValue = dynamicDarkColorScheme(LocalContext.current).secondaryContainer,
+                        lightValue = dynamicLightColorScheme(LocalContext.current).secondaryContainer
+                    )
+                } else {
+                    getThemeValue(
+                        darkValue = SurveyColor.Navy,
+                        lightValue = SurveyColor.Bunker
+                    )
+                }
+            ) {
                 navigateToPlayStore.invoke()
             }
         }

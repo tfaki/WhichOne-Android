@@ -22,7 +22,33 @@ sealed class WhichOneDirection(
     object Survey : WhichOneDirection(
         whichOneScreen = WhichOneScreen.SURVEY
     ) {
-        val route = whichOneScreen.path
+        private const val argTitle = "title"
+        private const val argId = "id"
+        val routeWithData = "${whichOneScreen.path}/{${argTitle}}/{${argId}}"
+
+        val arguments = listOf(
+            navArgument(argTitle) {
+                type = NavType.StringType
+            },
+            navArgument(argId) {
+                type = NavType.StringType
+            }
+        )
+
+        fun routeSurvey(
+            title: String,
+            id: String
+        ): String {
+            return "${whichOneScreen.path}/$title/$id"
+        }
+
+        fun getTitle(nbse: NavBackStackEntry): String {
+            return nbse.arguments?.getString(argTitle).orEmpty()
+        }
+
+        fun getId(nbse: NavBackStackEntry): String {
+            return nbse.arguments?.getString(argId).orEmpty()
+        }
     }
 
     object Result : WhichOneDirection(

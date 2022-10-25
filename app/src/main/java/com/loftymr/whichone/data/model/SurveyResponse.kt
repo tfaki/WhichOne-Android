@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * Created by talhafaki on 9.09.2022.
  */
 
-data class RingsOfThePowerResponse(
+data class SurveyResponse(
     @SerializedName("questions")
     val questions: List<Questions>? = null,
     @SerializedName("charecter")
@@ -28,9 +28,11 @@ data class Character(
     @SerializedName("title")
     val title: String? = null,
     @SerializedName("srcset")
-    val srcSet: SrcSet? = null,
+    val srcSet: String? = null,
     @SerializedName("description")
-    val description: String? = null
+    val description: String? = null,
+    @SerializedName("description_reason")
+    val descriptionReason: String? = null
 )
 
 data class SrcSet(

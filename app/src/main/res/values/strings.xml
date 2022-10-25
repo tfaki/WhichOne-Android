@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WhichOne</string>
+    <string name="app_name">Which One</string>
     <string name="ad_id_banner"></string> <!-- Test Ad -->
     <string name="ad_test_id_banner">ca-app-pub-3940256099942544/6300978111</string> <!-- Test Ad -->
     <string name="ad_id_interstitial"></string> <!-- Test Ad -->
@@ -8,6 +8,14 @@
     <string name="something_went_wrong">Something went wrong!</string>
     <string name="retry">RETRY</string>
     <string name="again">AGAIN</string>
+    <string name="home">HOME</string>
+
+    <!-- region Home Screen -->
+    <string name="home_title">Categories</string>
+    <string name="home_featured">Featured For You</string>
+    <string name="home_tv_series">TV Series</string>
+    <string name="home_movies">Movies</string>
+    <!-- endregion -->
 
     <!-- region Survey Screen -->
     <string name="survey_title">Rings Of Power</string>

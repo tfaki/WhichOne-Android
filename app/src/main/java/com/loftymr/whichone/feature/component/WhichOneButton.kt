@@ -8,6 +8,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,18 +22,12 @@ import com.loftymr.whichone.util.Util
  */
 
 @Composable
-fun WhichOneButton(modifier: Modifier = Modifier, buttonText: String, onClick: () -> Unit) {
-    val buttonBackground = if (Util.isSupportsDynamic) {
-        getThemeValue(
-            darkValue = dynamicDarkColorScheme(LocalContext.current).secondaryContainer,
-            lightValue = dynamicLightColorScheme(LocalContext.current).secondaryContainer
-        )
-    } else {
-        getThemeValue(
-            darkValue = SurveyColor.Navy,
-            lightValue = SurveyColor.Bunker
-        )
-    }
+fun WhichOneButton(
+    modifier: Modifier = Modifier,
+    buttonText: String,
+    buttonBackground: Color,
+    onClick: () -> Unit
+) {
 
     val buttonTextBackground = if (Util.isSupportsDynamic) {
         getThemeValue(
@@ -41,8 +36,8 @@ fun WhichOneButton(modifier: Modifier = Modifier, buttonText: String, onClick: (
         )
     } else {
         getThemeValue(
-            darkValue = SurveyColor.Navy,
-            lightValue = SurveyColor.Bunker
+            darkValue = SurveyColor.Biscay,
+            lightValue = SurveyColor.White
         )
     }
     Card(
