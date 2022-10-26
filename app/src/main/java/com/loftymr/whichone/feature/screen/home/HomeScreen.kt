@@ -1,12 +1,16 @@
 package com.loftymr.whichone.feature.screen.home
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -15,10 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.loftymr.whichone.R
-import com.loftymr.whichone.data.model.Category
+import com.loftymr.whichone.data.model.CategoryResponse
 import com.loftymr.whichone.feature.component.CategorySlider
 import com.loftymr.whichone.feature.component.LoadingView
 import com.loftymr.whichone.feature.component.SearchView
+import com.loftymr.whichone.feature.component.WhichOneAnim
 import com.loftymr.whichone.feature.component.WhichOneTemplate
 import com.loftymr.whichone.feature.component.WhichOneTopBar
 import com.loftymr.whichone.feature.screen.survey.ErrorView
@@ -35,7 +40,7 @@ import java.util.Locale
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToSurvey: (Category) -> Unit
+    navigateToSurvey: (CategoryResponse) -> Unit
 ) {
 
     Util.setStatusBar()
@@ -75,19 +80,18 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeContent(
-    data: List<Category>,
-    navigateToSurvey: (Category) -> Unit
+    data: List<CategoryResponse>,
+    navigateToSurvey: (CategoryResponse) -> Unit
 ) {
-    var featuredList: ArrayList<Category>? = null
+    var featuredList: ArrayList<CategoryResponse>? = null
     val searchText = remember { mutableStateOf(TextFieldValue("")) }
 
     val filteredCategories = if (searchText.value.text.isEmpty()) {
         data
     } else {
-        val resultList = ArrayList<Category>()
+        val resultList = ArrayList<CategoryResponse>()
         for (category in data) {
             if (category.title.orEmpty().lowercase(Locale.getDefault())
                     .contains(searchText.value.text.lowercase(Locale.getDefault()))
@@ -117,6 +121,31 @@ fun HomeContent(
 
         item {
             SearchView(state = searchText)
+        }
+
+        item {
+            if (filteredCategories.isEmpty()) {
+                Column(modifier = Modifier.fillParentMaxSize()) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = stringResource(id = R.string.home_empty_list),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 16.dp),
+                        style = WhichOneTheme.fontWhichOne.bold16.copy(
+                            fontSize = 14.sp,
+                            color = getThemeValue(
+                                darkValue = SurveyColor.Alabaster,
+                                lightValue = SurveyColor.Biscay
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    WhichOneAnim(rawResId = R.raw.empty_anim)
+                }
+                return@item
+            }
         }
 
         item {

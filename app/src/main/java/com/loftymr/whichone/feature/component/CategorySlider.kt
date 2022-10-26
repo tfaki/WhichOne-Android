@@ -13,7 +13,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
-import com.loftymr.whichone.data.model.Category
+import com.loftymr.whichone.data.model.CategoryResponse
 import kotlin.math.absoluteValue
 
 /**
@@ -23,7 +23,7 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CategorySlider(list: List<Category>, navigateToSurvey: (Category) -> Unit) {
+fun CategorySlider(list: List<CategoryResponse>, navigateToSurvey: (CategoryResponse) -> Unit) {
 
     val pagerState = rememberPagerState(initialPage = 0)
     var paddingValues = PaddingValues(start = 16.dp, end = 36.dp)

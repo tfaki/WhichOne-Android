@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.loftymr.whichone.feature.theme.SurveyColor
+import com.loftymr.whichone.feature.theme.getThemeValue
 
 /**
  * Created by talhafaki on 25.10.2022.
@@ -37,7 +38,13 @@ fun SearchView(state: MutableState<TextFieldValue>) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        textStyle = TextStyle(color = SurveyColor.Biscay, fontSize = 18.sp),
+        textStyle = TextStyle(
+            color = getThemeValue(
+                darkValue = SurveyColor.Biscay,
+                lightValue = SurveyColor.White
+            ),
+            fontSize = 18.sp
+        ),
         leadingIcon = {
             Icon(
                 Icons.Default.Search,
@@ -68,11 +75,26 @@ fun SearchView(state: MutableState<TextFieldValue>) {
         singleLine = true,
         shape = RoundedCornerShape(28.dp), // The TextFiled has rounded corners top left and right by default
         colors = TextFieldDefaults.textFieldColors(
-            textColor = SurveyColor.Biscay,
-            cursorColor = SurveyColor.Biscay,
-            leadingIconColor = SurveyColor.Biscay,
-            trailingIconColor = SurveyColor.Biscay,
-            backgroundColor = SurveyColor.White,
+            textColor = getThemeValue(
+                darkValue = SurveyColor.Biscay,
+                lightValue = SurveyColor.Alabaster
+            ),
+            cursorColor = getThemeValue(
+                darkValue = SurveyColor.Biscay,
+                lightValue = SurveyColor.Alabaster
+            ),
+            leadingIconColor = getThemeValue(
+                darkValue = SurveyColor.Biscay,
+                lightValue = SurveyColor.Alabaster
+            ),
+            trailingIconColor = getThemeValue(
+                darkValue = SurveyColor.Biscay,
+                lightValue = SurveyColor.Alabaster
+            ),
+            backgroundColor = getThemeValue(
+                darkValue = SurveyColor.Alabaster,
+                lightValue = SurveyColor.Biscay
+            ),
             focusedIndicatorColor = SurveyColor.Transparent,
             unfocusedIndicatorColor = SurveyColor.Transparent,
             disabledIndicatorColor = SurveyColor.Transparent

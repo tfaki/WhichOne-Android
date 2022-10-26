@@ -2,12 +2,16 @@ package com.loftymr.whichone.feature.component
 
 import android.app.Activity
 import android.content.Context
-import android.os.Handler
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.gms.ads.*
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.loftymr.whichone.BuildConfig
@@ -58,17 +62,11 @@ fun loadInterstitial(context: Context, isFinished: (Boolean) -> Unit) {
             }
         }
     )
-    Handler().postDelayed({
-        if (mInterstitialAd == null) {
-            isFinished.invoke(true)
-        }
-    }, 4000)
 }
 
 fun showInterstitial(context: Context, isFinished: (Boolean) -> Unit) {
     if (mInterstitialAd != null) {
         mInterstitialAd!!.show(context as Activity)
-
         addInterstitialCallbacks(isFinished = isFinished)
     } else {
         isFinished.invoke(true)

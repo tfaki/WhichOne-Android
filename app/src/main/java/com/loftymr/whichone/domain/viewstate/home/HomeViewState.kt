@@ -1,6 +1,6 @@
 package com.loftymr.whichone.domain.viewstate.home
 
-import com.loftymr.whichone.data.model.Category
+import com.loftymr.whichone.data.model.CategoryResponse
 import com.loftymr.whichone.domain.viewstate.WhichOneViewState
 
 /**
@@ -10,5 +10,5 @@ import com.loftymr.whichone.domain.viewstate.WhichOneViewState
 data class HomeViewState(
     var isLoading: Boolean = false,
     val isError: Boolean = false,
-    val data: List<Category>? = null
+    val data: List<CategoryResponse>? = null
 ) : WhichOneViewState

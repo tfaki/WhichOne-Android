@@ -1,6 +1,5 @@
 package com.loftymr.whichone.feature.screen.home
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.loftymr.whichone.data.remote.util.DataState
 import com.loftymr.whichone.domain.repository.WhichOneRepository
@@ -18,8 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val whichOneRepository: WhichOneRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val whichOneRepository: WhichOneRepository
 ) : BaseViewModel<HomeViewState, HomeViewEvent>() {
 
     init {

@@ -18,6 +18,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -29,8 +30,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.loftymr.whichone.R
+import com.loftymr.whichone.feature.component.LoadingView
 import com.loftymr.whichone.feature.component.WhichOneButton
+import com.loftymr.whichone.feature.component.WhichOneLaunchedEffect
 import com.loftymr.whichone.feature.component.WhichOneTemplate
+import com.loftymr.whichone.feature.component.loadInterstitial
 import com.loftymr.whichone.feature.theme.SurveyColor
 import com.loftymr.whichone.feature.theme.WhichOneTheme
 import com.loftymr.whichone.feature.theme.getThemeValue
@@ -49,29 +53,46 @@ fun ResultScreen(
     navigateToSurvey: (String, String) -> Unit,
     navigateToHome: () -> Unit
 ) {
-    WhichOneTemplate(
-        topBar = {},
-    ) {
-        ResultContent(
-            title = title.orEmpty(),
-            character = imageSource.orEmpty(),
-            desc = desc.orEmpty(),
-            navigateToSurvey = {
-                navigateToSurvey.invoke(
-                    viewModel.appCache.surveyId.orEmpty(),
-                    viewModel.appCache.surveyTitle.orEmpty()
-                )
-            },
-            navigateToHome = {
-                navigateToHome.invoke()
+    val viewState = viewModel.uiState.collectAsState().value
+    val context = LocalContext.current
+
+    WhichOneLaunchedEffect {
+        loadInterstitial(
+            context = context,
+            isFinished = {
+                viewModel.hideLoading()
             }
         )
     }
+
+    when {
+        viewState.isLoading -> {
+            LoadingView()
+        }
+
+        else -> {
+            WhichOneTemplate(
+                topBar = {},
+            ) {
+                ResultContent(
+                    title = title.orEmpty(),
+                    character = imageSource.orEmpty(),
+                    desc = desc.orEmpty(),
+                    navigateToSurvey = {
+                        navigateToSurvey.invoke(
+                            viewModel.appCache.surveyId.orEmpty(),
+                            viewModel.appCache.surveyTitle.orEmpty()
+                        )
+                    },
+                    navigateToHome = {
+                        navigateToHome.invoke()
+                    }
+                )
+            }
+        }
+    }
     BackHandler {
-        navigateToSurvey.invoke(
-            viewModel.appCache.surveyId.orEmpty(),
-            viewModel.appCache.surveyTitle.orEmpty()
-        )
+        navigateToHome.invoke()
     }
 }
 
@@ -92,7 +113,7 @@ fun ResultContent(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp)
+                .height(325.dp)
                 .padding(16.dp),
             elevation = CardDefaults.cardElevation(10.dp),
             shape = RoundedCornerShape(8.dp)

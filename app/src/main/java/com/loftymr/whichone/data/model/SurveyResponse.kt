@@ -34,14 +34,3 @@ data class Character(
     @SerializedName("description_reason")
     val descriptionReason: String? = null
 )
-
-data class SrcSet(
-    @SerializedName("320w")
-    val threeHundred: String? = null,
-    @SerializedName("480w")
-    val fourHundred: String? = null,
-    @SerializedName("650w")
-    val sixHundred: String? = null,
-    @SerializedName("970w")
-    val nineHundred: String? = null
-)

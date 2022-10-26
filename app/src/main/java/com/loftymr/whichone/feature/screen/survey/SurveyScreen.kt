@@ -104,19 +104,10 @@ fun SurveyScreen(
                             viewModel.appCache.surveyId = id
                             viewModel.appCache.surveyTitle = title
                             navigateToResult.invoke(srcSet)
-                        },
-                        adMob = {
-                            viewModel.showLoading(it)
                         }
                     )
                 }
             )
-        }
-
-        else -> {
-            ErrorView {
-                viewModel.getSurvey(id)
-            }
         }
     }
 }
@@ -124,10 +115,8 @@ fun SurveyScreen(
 @Composable
 fun SurveyContent(
     data: SurveyResponse,
-    navigateToResult: (Character?) -> Unit,
-    adMob: (Boolean) -> Unit
+    navigateToResult: (Character?) -> Unit
 ) {
-    val context = LocalContext.current
     var questionIndex by remember {
         mutableStateOf(0)
     }
@@ -197,14 +186,7 @@ fun SurveyContent(
                                     if (questionIndex < data.questions.lastIndex) {
                                         questionIndex++
                                     } else {
-                                        adMob.invoke(true)
-                                        loadInterstitial(
-                                            context = context,
-                                            isFinished = {
-                                                adMob.invoke(false)
-                                                navigateToResult.invoke(data.character)
-                                            }
-                                        )
+                                        navigateToResult.invoke(data.character)
                                     }
                                 }
                             )

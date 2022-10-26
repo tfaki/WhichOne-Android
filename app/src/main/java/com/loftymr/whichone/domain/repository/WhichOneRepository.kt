@@ -1,6 +1,6 @@
 package com.loftymr.whichone.domain.repository
 
-import com.loftymr.whichone.data.model.Category
+import com.loftymr.whichone.data.model.CategoryResponse
 import com.loftymr.whichone.data.model.SurveyResponse
 import com.loftymr.whichone.data.remote.source.BaseRemoteDataSource
 import com.loftymr.whichone.data.remote.api.WhichOneService
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class WhichOneRepository @Inject constructor(
     private val whichOneService: WhichOneService
 ) : BaseRemoteDataSource() {
-    suspend fun getCategories(): Flow<DataState<List<Category>>> =
+    suspend fun getCategories(): Flow<DataState<List<CategoryResponse>>> =
         getResult {
             whichOneService.getCategories()
         }

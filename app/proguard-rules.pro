@@ -51,7 +51,5 @@
 
   -keep class com.loftymr.whichone.feature.screen.splash.SplashActivity
   -keep class com.loftymr.whichone.feature.screen.main.MainActivity
-  -keep class com.loftymr.whichone.data.model.Character
-  -keep class com.loftymr.whichone.data.model.Questions
-  -keep class com.loftymr.whichone.data.model.RingsOfThePowerResponse
-  -keep class com.loftymr.whichone.data.model.SrcSet
+  -keep class com.loftymr.whichone.data.model.*
+
