@@ -111,7 +111,11 @@ private fun NavGraphBuilder.resultNav(
                         title = surveyTitle,
                         id = surveyId
                     )
-                ) {}
+                ) {
+                    popUpTo(WhichOneDirection.Home.route) {
+                        inclusive = false
+                    }
+                }
             },
             navigateToHome = {
                 navController.navigateSafe(

@@ -48,8 +48,11 @@
   -dontwarn com.google.appengine.**
   -dontwarn java.nio.file.**
   -dontwarn org.codehaus.**
+  -keep,allowobfuscation,allowshrinking interface retrofit2.Call
+  -keep,allowobfuscation,allowshrinking class retrofit2.Response
+  -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 
   -keep class com.loftymr.whichone.feature.screen.splash.SplashActivity
   -keep class com.loftymr.whichone.feature.screen.main.MainActivity
-  -keep class com.loftymr.whichone.data.model.*
+  -keepclasseswithmembers class com.loftymr.whichone.data.model.** { *; }
 

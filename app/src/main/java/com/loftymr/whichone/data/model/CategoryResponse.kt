@@ -1,11 +1,13 @@
 package com.loftymr.whichone.data.model
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 /**
  * Created by talhafaki on 25.10.2022.
  */
 
+@Keep
 data class CategoryResponse(
     @SerializedName("cat_id")
     val catId: String? = null,

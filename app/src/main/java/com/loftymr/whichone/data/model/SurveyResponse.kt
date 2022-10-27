@@ -1,11 +1,12 @@
 package com.loftymr.whichone.data.model
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 /**
  * Created by talhafaki on 9.09.2022.
  */
-
+@Keep
 data class SurveyResponse(
     @SerializedName("questions")
     val questions: List<Questions>? = null,
@@ -15,6 +16,7 @@ data class SurveyResponse(
     val backgroundPictures: List<String>? = null
 )
 
+@Keep
 data class Questions(
     @SerializedName("id")
     val id: String? = null,
@@ -24,6 +26,7 @@ data class Questions(
     val choices: List<String>? = null
 )
 
+@Keep
 data class Character(
     @SerializedName("title")
     val title: String? = null,

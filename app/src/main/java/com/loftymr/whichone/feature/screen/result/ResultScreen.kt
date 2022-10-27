@@ -189,8 +189,8 @@ fun ResultContent(
                 buttonText = stringResource(id = R.string.home),
                 buttonBackground = if (Util.isSupportsDynamic) {
                     getThemeValue(
-                        darkValue = dynamicDarkColorScheme(LocalContext.current).secondaryContainer,
-                        lightValue = dynamicLightColorScheme(LocalContext.current).secondaryContainer
+                        darkValue = dynamicDarkColorScheme(LocalContext.current).onSecondary,
+                        lightValue = dynamicLightColorScheme(LocalContext.current).onSecondary
                     )
                 } else {
                     getThemeValue(

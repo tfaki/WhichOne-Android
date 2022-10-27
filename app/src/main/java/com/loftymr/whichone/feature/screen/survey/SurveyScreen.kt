@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
@@ -40,7 +39,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.loftymr.whichone.R
 import com.loftymr.whichone.data.model.Character
 import com.loftymr.whichone.data.model.SurveyResponse
-import com.loftymr.whichone.feature.component.AdvertView
 import com.loftymr.whichone.feature.component.Head
 import com.loftymr.whichone.feature.component.LoadingView
 import com.loftymr.whichone.feature.component.SelectionBox
@@ -49,7 +47,6 @@ import com.loftymr.whichone.feature.component.WhichOneButton
 import com.loftymr.whichone.feature.component.WhichOneLaunchedEffect
 import com.loftymr.whichone.feature.component.WhichOneTemplate
 import com.loftymr.whichone.feature.component.WhichOneTopBar
-import com.loftymr.whichone.feature.component.loadInterstitial
 import com.loftymr.whichone.feature.theme.SurveyColor
 import com.loftymr.whichone.feature.theme.WhichOneTheme
 import com.loftymr.whichone.feature.theme.getThemeValue
@@ -192,15 +189,6 @@ fun SurveyContent(
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
-                    }
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(bottom = 2.dp)
-                            .weight(1f),
-                        contentAlignment = Alignment.BottomCenter
-                    ) {
-                        AdvertView(modifier = Modifier.wrapContentSize())
                     }
                 }
             }
